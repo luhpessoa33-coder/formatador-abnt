@@ -1,46 +1,23 @@
-/**
- * Lógica Master Admin V3.0
- */
-const MASTER_KEY = "psa2026-ifpe"; // Altere sua chave master aqui
-let usuariosAutorizados = JSON.parse(localStorage.getItem('psa_authorized_users')) || ["admin@ifpe.edu.br"];
+const MASTER_USER = "luanapessoa";
+const MASTER_PASS = "psa2026-ifpe";
 
 function abrirPainelMaster() {
     new bootstrap.Modal(document.getElementById('modalMaster')).show();
 }
 
 function autenticarMaster() {
-    const key = document.getElementById('masterKey').value;
-    if (key === MASTER_KEY) {
-        document.getElementById('loginMasterArea').classList.add('d-none');
-        document.getElementById('gestaoUsuariosArea').classList.remove('d-none');
-        atualizarListaUsuarios();
-    } else {
-        alert("Chave Master Incorreta!");
-    }
+    const u = document.getElementById('masterUser').value;
+    const p = document.getElementById('masterPass').value;
+
+    if (u === MASTER_USER && p === MASTER_PASS) {
+        document.getElementById('loginArea').classList.add('d-none');
+        document.getElementById('dashArea').classList.remove('d-none');
+        renderizarListaColegas();
+    } else { alert("Utilizador ou Palavra-passe incorretos!"); }
 }
 
-function cadastrarUsuario() {
-    const user = document.getElementById('novoUser').value;
-    if (user && !usuariosAutorizados.includes(user)) {
-        usuariosAutorizados.push(user);
-        localStorage.setItem('psa_authorized_users', JSON.stringify(usuariosAutorizados));
-        atualizarListaUsuarios();
-        document.getElementById('novoUser').value = "";
-    }
-}
-
-function atualizarListaUsuarios() {
-    const lista = document.getElementById('listaUsers');
-    lista.innerHTML = usuariosAutorizados.map(u => `
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            ${u}
-            <button class="btn btn-sm btn-danger" onclick="removerUsuario('${u}')">Remover</button>
-        </li>
-    `).join('');
-}
-
-function removerUsuario(u) {
-    usuariosAutorizados = usuariosAutorizados.filter(user => user !== u);
-    localStorage.setItem('psa_authorized_users', JSON.stringify(usuariosAutorizados));
-    atualizarListaUsuarios();
+function renderizarListaColegas() {
+    const lista = document.getElementById('listaUsuarios');
+    const colegas = JSON.parse(localStorage.getItem('colegas_acesso')) || ["coordenacao@ifpe.edu.br"];
+    lista.innerHTML = colegas.map(c => `<li class="list-group-item d-flex justify-content-between">${c} <button class="btn btn-xxs btn-danger" onclick="removerColega('${c}')">X</button></li>`).join('');
 }
