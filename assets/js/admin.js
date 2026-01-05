@@ -1,23 +1,35 @@
-const MASTER_USER = "luanapessoa";
-const MASTER_PASS = "psa2026-ifpe";
+// Simulação de Banco de Dados de Usuários
+const USUARIOS_PADRAO = [
+    { nome: "Administrador", chave: "MASTER2026", nivel: "total" },
+    { nome: "Estudante IFPE", chave: "IPOJUCAPS1", nivel: "editor" }
+];
 
-function abrirPainelMaster() {
-    new bootstrap.Modal(document.getElementById('modalMaster')).show();
+function abrirAdmin() {
+    const modal = new bootstrap.Modal(document.getElementById('modalAdmin'));
+    const area = document.getElementById('adminData');
+    
+    // Lista usuários autorizados
+    area.innerHTML = `
+        <div class="col-12 mb-3">
+            <h6>Usuários com Acesso à Estação</h6>
+            <ul class="list-group">
+                ${USUARIOS_PADRAO.map(u => `
+                    <li class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between">
+                        ${u.nome} <span class="badge bg-primary">${u.nivel}</span>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-outline-danger btn-sm" onclick="limparCacheGlobal()">Limpar Todos os Rascunhos</button>
+        </div>
+    `;
+    modal.show();
 }
 
-function autenticarMaster() {
-    const u = document.getElementById('masterUser').value;
-    const p = document.getElementById('masterPass').value;
-
-    if (u === MASTER_USER && p === MASTER_PASS) {
-        document.getElementById('loginArea').classList.add('d-none');
-        document.getElementById('dashArea').classList.remove('d-none');
-        renderizarListaColegas();
-    } else { alert("Utilizador ou Palavra-passe incorretos!"); }
-}
-
-function renderizarListaColegas() {
-    const lista = document.getElementById('listaUsuarios');
-    const colegas = JSON.parse(localStorage.getItem('colegas_acesso')) || ["coordenacao@ifpe.edu.br"];
-    lista.innerHTML = colegas.map(c => `<li class="list-group-item d-flex justify-content-between">${c} <button class="btn btn-xxs btn-danger" onclick="removerColega('${c}')">X</button></li>`).join('');
+function limparCacheGlobal() {
+    if(confirm("Isso apagará todos os dados salvos no navegador. Continuar?")) {
+        localStorage.clear();
+        location.reload();
+    }
 }
