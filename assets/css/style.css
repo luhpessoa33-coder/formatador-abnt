@@ -1,4 +1,6 @@
-body { transition: background 0.3s; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+/* Design Industrial Científico */
+:root { --primary-color: #0d6efd; }
+body { font-family: 'Inter', sans-serif; transition: 0.3s; overflow-x: hidden; }
 body.dark-mode { background-color: #0f1113 !important; }
 
 #editor-viewport {
@@ -21,7 +23,7 @@ body.dark-mode { background-color: #0f1113 !important; }
 
 /* Margens Estritas ABNT */
 .ql-editor {
-    padding: 3cm 2cm 2cm 3cm !important; /* Esq/Sup 3cm, Dir/Inf 2cm */
+    padding: 3cm 2cm 2cm 3cm !important;
     font-family: 'Times New Roman', serif;
     font-size: 12pt;
     line-height: 1.5;
@@ -29,7 +31,7 @@ body.dark-mode { background-color: #0f1113 !important; }
     color: #000;
 }
 
+#paper-A4.over-limit { border: 8px solid #dc3545 !important; opacity: 0.8; }
 .nav-tabs .nav-link { border: none; font-weight: bold; opacity: 0.6; color: white; transition: 0.3s; }
-.nav-tabs .nav-link.active { border-bottom: 4px solid #0d6efd !important; opacity: 1; background: transparent !important; }
-#paper-A4.over-limit { border: 8px solid #dc3545 !important; }
+.nav-tabs .nav-link.active { border-bottom: 4px solid #ffc107 !important; opacity: 1; background: transparent !important; }
 .btn-xxs { padding: 1px 5px; font-size: 0.65rem; }
