@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AcademicHub Pro V3.0 | Estação de Trabalho Científica</title>
+    <title>AcademicHub Pro V3.0 | Estação Ipojuca Ultra</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -11,115 +11,101 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="https://unpkg.com/html-to-docx@1.2.4/dist/html-to-docx.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
-<body class="bg-dark text-light">
+<body class="bg-dark text-light overflow-hidden">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow-lg">
+<nav class="navbar navbar-dark bg-primary shadow-lg py-1">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#"><i class="fas fa-brain"></i> ACADEMIC AI V3.0 - IPOJUCA</a>
+        <span class="navbar-brand fw-bold small"><i class="fas fa-microchip"></i> ACADEMIC AI V3.0 [MODO DISSERTAÇÃO]</span>
         <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-sm btn-warning" onclick="abrirPainelMaster()"><i class="fas fa-user-shield"></i> Admin Master</button>
-            <div id="statusSalvo" class="small text-white-50"><i class="fas fa-check-circle"></i> Sincronizado</div>
-            <button class="btn btn-sm btn-outline-light" onclick="toggleDarkMode()"><i class="fas fa-moon"></i></button>
+            <div id="pageMonitor" class="badge bg-danger">Páginas: 1 / 300</div>
+            <div id="statusSalvo" class="small text-white-50"><i class="fas fa-sync fa-spin"></i> Inicializando...</div>
+            <button class="btn btn-sm btn-warning fw-bold" onclick="abrirAdmin()"><i class="fas fa-user-shield"></i> MASTER</button>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid mt-2">
-    <ul class="nav nav-tabs border-0" id="v3Tabs" role="tablist">
-        <li class="nav-item"><button class="nav-link active text-white" data-bs-toggle="tab" data-bs-target="#tab-upload">1. Importação</button></li>
-        <li class="nav-item"><button class="nav-link text-white" data-bs-toggle="tab" data-bs-target="#tab-editor">2. Editor ABNT (A4)</button></li>
-        <li class="nav-item"><button class="nav-link text-white" data-bs-toggle="tab" data-bs-target="#tab-biblio">3. Bibliografia & SIG</button></li>
-        <li class="nav-item"><button class="nav-link text-white" data-bs-toggle="tab" data-bs-target="#tab-ia">4. Inteligência IA</button></li>
-        <li class="nav-item"><button class="nav-link text-white" data-bs-toggle="tab" data-bs-target="#tab-export">5. Finalizar & Exportar</button></li>
-    </ul>
+<div class="d-flex" style="height: calc(100vh - 40px);">
+    <aside class="bg-dark border-end border-secondary p-2" style="width: 250px;">
+        <div class="nav flex-column nav-pills small" id="v3Tabs" role="tablist">
+            <button class="nav-link active mb-2" data-bs-toggle="pill" data-bs-target="#tab-import"><i class="fas fa-file-upload"></i> 1. Importar Projeto</button>
+            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-editor"><i class="fas fa-edit"></i> 2. Escritório A4</button>
+            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-ia"><i class="fas fa-robot"></i> 3. Otimizador IA</button>
+            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-biblio"><i class="fas fa-book"></i> 4. Bibliografia</button>
+            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-export"><i class="fas fa-file-export"></i> 5. Exportação Final</button>
+        </div>
 
-    <div class="tab-content p-3 bg-secondary bg-opacity-10 rounded-bottom shadow">
+        <hr class="text-secondary">
         
-        <div class="tab-pane fade show active" id="tab-upload">
-            <div class="text-center py-5">
-                <i class="fas fa-file-import fa-4x mb-3 text-primary"></i>
-                <h3>Importar Manuscrito (.docx)</h3>
-                <p class="text-white-50">Traga seu texto da Bacia do Ipojuca para formatação automática.</p>
-                <input type="file" id="fileInput" class="form-control w-50 mx-auto mb-3" accept=".docx">
-                <button class="btn btn-primary px-5" onclick="importarDocx()">Iniciar Estação de Trabalho</button>
+        <div class="template-box p-2 bg-secondary bg-opacity-10 rounded">
+            <label class="x-small fw-bold text-uppercase">Configuração de Normas</label>
+            <select id="masterTemplate" class="form-select form-select-sm bg-dark text-white border-secondary mt-1" onchange="aplicarTemplate()">
+                <option value="ifpe">IFPE - Dissertação</option>
+                <option value="abnt_generico">ABNT - TCC Geral</option>
+                <option value="apa">Normas APA 7ª Ed.</option>
+                <option value="vancouver">Vancouver (Saúde)</option>
+            </select>
+        </div>
+        
+        <div class="mt-4 p-2 border border-warning rounded shadow-sm">
+            <h6 class="text-warning small"><i class="fas fa-exclamation-triangle"></i> Meta: 3 Dias</h6>
+            <div class="progress" style="height: 5px;">
+                <div class="progress-bar bg-warning" style="width: 65%"></div>
             </div>
         </div>
+    </aside>
 
-        <div class="tab-pane fade" id="tab-editor">
-            <div class="row">
-                <aside class="col-lg-2">
-                    <div class="card bg-dark text-white border-0 p-2 small shadow-sm">
-                        <label class="fw-bold border-bottom mb-2 pb-1 text-center w-100">ABNT / IFPE</label>
-                        <select id="templateSelector" class="form-select form-select-sm bg-secondary text-white border-0 mb-3">
-                            <option value="ifpe">IFPE: Dissertação</option>
-                            <option value="abnt">ABNT: Padrão</option>
-                        </select>
-                        <div id="pageCounter" class="mb-3 text-info text-center">0 palavras</div>
-                        <button class="btn btn-xs btn-outline-light w-100 mb-1" onclick="gerarCapa()">Gerar Capa</button>
-                        <button class="btn btn-xs btn-outline-warning w-100 mb-1" onclick="gerarFicha()">Ficha Cat.</button>
-                        <button class="btn btn-xs btn-outline-danger w-100 mt-4" onclick="limparEditor()">Resetar Tudo</button>
+    <main class="flex-grow-1 overflow-auto bg-secondary bg-opacity-25 p-4">
+        <div class="tab-content" id="v3TabsContent">
+            
+            <div class="tab-pane fade show active" id="tab-import">
+                <div class="card bg-dark border-secondary p-5 text-center">
+                    <i class="fas fa-cloud-upload-alt fa-4x text-primary mb-3"></i>
+                    <h2>Carregar Manuscrito</h2>
+                    <p>Suba o seu Word da Bacia do Ipojuca. A IA fará o "re-mapping" para as normas do IFPE.</p>
+                    <input type="file" id="fileInput" class="form-control w-50 mx-auto my-4">
+                    <button class="btn btn-primary btn-lg px-5" onclick="processarImportacaoPrincipal()">Processar e Formatar</button>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-editor">
+                <div id="editor-container" class="d-flex justify-content-center">
+                    <div id="paper-A4" class="bg-white shadow-2xl">
+                        <div id="main-editor"></div>
                     </div>
-                </aside>
-                <main class="col-lg-10">
-                    <div id="editor-viewport">
-                        <div id="toolbar-container" class="bg-white border rounded-top"></div>
-                        <div id="paper-A4" class="shadow-lg">
-                            <div id="main-editor"></div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-ia">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card bg-dark border-primary p-3">
+                            <h6><i class="fas fa-vial"></i> Validação AHP</h6>
+                            <p class="x-small">Verifica se os critérios (Declividade, Solo, etc.) estão citados corretamente.</p>
+                            <button class="btn btn-sm btn-outline-primary" onclick="iaAnalisarMetodologia()">Analisar Agora</button>
                         </div>
                     </div>
-                </main>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="tab-biblio">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="card bg-dark text-white p-3 border-0 h-100 shadow">
-                        <h6>Busca Científica & Elicit</h6>
-                        <div class="input-group mb-3">
-                            <input type="text" id="inputBusca" class="form-control" placeholder="PSA Hídrico, Ipojuca, AHP...">
-                            <button class="btn btn-primary" onclick="buscarCientifico()"><i class="fas fa-search"></i></button>
+                    <div class="col-md-8">
+                        <div id="iaConsole" class="bg-black p-3 rounded font-monospace small text-success" style="height: 400px; overflow-y: auto;">
+                            > Sistema IA pronto para análise...
                         </div>
-                        <div id="areaResultados" class="overflow-auto" style="height: 50vh;"></div>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="card bg-white text-dark p-3 h-100 shadow">
-                        <h6>Referências Salvas (ABNT NBR 6023)</h6>
-                        <div id="listaRefs" class="small mt-2"></div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="tab-pane fade" id="tab-ia">
-            <div class="row g-3">
-                <div class="col-md-12">
-                    <div class="card bg-dark text-white p-3 border-0 shadow">
-                        <h6>Consultoria IA: Coerência Metodológica</h6>
-                        <p class="small text-white-50">A IA analisará seu texto sobre os critérios AHP (Declividade, Solo, etc).</p>
-                        <button class="btn btn-outline-warning mb-3" onclick="analisarIA()">Analisar Rigor Científico</button>
-                        <div id="iaFeedback" class="p-3 bg-secondary rounded">Aguardando comando...</div>
-                    </div>
-                </div>
-            </div>
         </div>
+    </main>
+</div>
 
-        <div class="tab-pane fade" id="tab-export">
-            <div class="row text-center py-5">
-                <div class="col-md-6">
-                    <i class="fas fa-file-word fa-4x text-primary mb-3"></i>
-                    <h5>Baixar .DOCX Editável</h5>
-                    <button class="btn btn-primary px-5" onclick="exportarDocx()">Download Word</button>
-                </div>
-                <div class="col-md-6">
-                    <i class="fas fa-file-pdf fa-4x text-danger mb-3"></i>
-                    <h5>Gerar PDF Final</h5>
-                    <button class="btn btn-danger px-5" onclick="window.print()">Imprimir PDF</button>
-                </div>
+<div class="modal fade" id="modalAdmin" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark border-warning">
+            <div class="modal-header"><h5 class="modal-title text-warning">Painel de Gestão Master</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <div id="adminData" class="row"></div>
             </div>
         </div>
     </div>
@@ -127,9 +113,11 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="assets/js/editor-core.js"></script>
-<script src="assets/js/search-logic.js"></script>
 <script src="assets/js/ai-logic.js"></script>
-<script src="assets/js/admin.js"></script>
+<script src="assets/js/search-logic.js"></script>
+
+</body>
+</html>
 
 </body>
 </html>
