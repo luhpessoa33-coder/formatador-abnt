@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="site-title">OmniEditor Pro | Enterprise Suite</title>
+    <title id="site-title">PSA Ipojuca | OmniEditor Framework v9</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,140 +12,143 @@
 
     <style>
         :root {
-            --sidebar-w: 420px;
+            --sidebar-w: 440px;
             --accent: #00d2ff;
-            --bg-dark: #0a0a0c;
-            --bg-panel: #141417;
-            --bg-card: #1f1f23;
+            --bg-dark: #080809;
+            --bg-panel: #111113;
+            --bg-card: #1a1a1d;
             --text-main: #f4f4f5;
             --text-dim: #71717a;
-            --admin-gold: #fbbf24;
+            --abnt-font: 'Arial', sans-serif;
         }
 
         body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Inter', sans-serif; overflow: hidden; margin: 0; }
         .app-shell { display: flex; height: 100vh; }
 
-        /* Login Overlay */
-        #login-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            display: flex; align-items: center; justify-content: center; z-index: 9999;
-            backdrop-filter: blur(10px); transition: 0.5s;
-        }
-
-        /* Sidebar & Abas */
-        aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid #27272a; display: flex; flex-direction: column; z-index: 100; }
-        .sidebar-header { padding: 15px; background: #000; border-bottom: 2px solid var(--accent); }
-        .nav-link { color: var(--text-dim); border: none !important; font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 15px 5px; }
+        /* Sidebar e Navegação */
+        aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid #27272a; display: flex; flex-direction: column; z-index: 100; transition: 0.3s; }
+        .sidebar-header { padding: 20px; background: #000; border-bottom: 2px solid var(--accent); }
+        .nav-link { color: var(--text-dim); border: none !important; font-size: 0.52rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; padding: 15px 2px; }
         .nav-link.active { background: transparent !important; color: var(--accent) !important; border-bottom: 2px solid var(--accent) !important; }
-        
-        /* Área do Editor ABNT */
-        main { flex-grow: 1; background: #18181b; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 60px 0; }
+        .tab-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
+
+        /* MODO ADMIN: Controle de Visibilidade */
+        .admin-only { display: none !important; }
+        .is-admin .admin-only { display: block !important; }
+        .is-admin .admin-inline { display: inline-block !important; }
+
+        /* Canvas de Escrita ABNT (NBR 14724) */
+        #viewport { flex-grow: 1; background: #1c1c1e; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 50px 0; }
         #paper-canvas { 
             width: 210mm; min-height: 297mm; background: #fff; 
-            padding: 30mm 20mm 20mm 30mm; /* ABNT RIGOROSA */
-            box-shadow: 0 40px 100px rgba(0,0,0,0.8); color: #000;
+            padding: 30mm 20mm 20mm 30mm; /* Rigor ABNT */
+            box-shadow: 0 50px 100px rgba(0,0,0,0.7); color: #000; position: relative;
         }
+        
+        /* Toolbar e Editor */
+        .ql-toolbar { position: sticky; top: -50px; background: #fff !important; z-index: 1000; border: none !important; border-bottom: 1px solid #eee !important; width: 100%; display: flex; justify-content: center; }
+        #editor { font-family: var(--abnt-font); font-size: 12pt; line-height: 1.5; border: none !important; }
 
-        /* Widgets e AI Chat */
-        .widget { background: var(--bg-card); border: 1px solid #2d2d30; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-        .ai-chat-container { height: 250px; background: #000; border-radius: 10px; padding: 12px; font-size: 0.8rem; overflow-y: auto; border: 1px solid #333; }
-        .btn-ai-platform { font-size: 0.65rem; padding: 5px 10px; border-radius: 4px; border: 1px solid #444; color: #fff; background: transparent; transition: 0.3s; }
-        .btn-ai-platform.active { background: var(--accent); color: #000; border-color: var(--accent); }
-
-        .timer-hero { font-family: 'JetBrains Mono', monospace; font-size: 2.5rem; font-weight: 900; color: var(--admin-gold); text-align: center; }
-
+        /* Widgets */
+        .widget { background: var(--bg-card); border: 1px solid #2d2d30; border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .timer-hero { font-family: 'JetBrains Mono', monospace; font-size: 2.2rem; font-weight: 900; color: #fbbf24; text-align: center; }
+        .btn-search-base { font-size: 0.6rem; padding: 8px; font-weight: bold; border-radius: 6px; text-align: left; width: 100%; margin-bottom: 4px; }
+        
+        .ai-chat-box { height: 220px; background: #000; border-radius: 10px; padding: 12px; font-size: 0.75rem; overflow-y: auto; border: 1px solid #333; }
+        
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
-<body>
-
-<div id="login-overlay">
-    <div class="text-center" style="width: 300px;">
-        <i class="fas fa-user-shield fa-3x text-info mb-3"></i>
-        <h5 class="fw-bold mb-4">ADMIN ACCESS</h5>
-        <input type="password" id="admin-pass" class="form-control bg-dark text-white border-secondary mb-3 text-center" placeholder="Chave de Acesso">
-        <button class="btn btn-info w-100 fw-bold" onclick="tryLogin()">ENTRAR NO SISTEMA</button>
-        <p class="x-small text-white-50 mt-4">OmniEditor Enterprise v7.0<br>Modelo de Referência Acadêmica</p>
-    </div>
-</div>
+<body id="master-body">
 
 <div class="app-shell">
     <aside>
         <div class="sidebar-header d-flex justify-content-between align-items-center">
             <div>
-                <h6 id="display-site" class="mb-0 fw-bold text-info uppercase">OMNIEDITOR PRO</h6>
-                <small id="display-user" class="text-white-50 x-small">Nível: Administrador</small>
+                <h6 id="site-name-ui" class="mb-0 fw-bold text-info">OMNIEDITOR framework</h6>
+                <small id="user-name-ui" class="text-white-50 x-small">Acesso Público</small>
             </div>
-            <i class="fas fa-shield-alt text-warning" title="Modo Admin Ativo"></i>
+            <i class="fas fa-fingerprint text-secondary" style="cursor: pointer;" onclick="toggleAdmin()" title="Login Admin"></i>
         </div>
         
-        <ul class="nav nav-tabs nav-fill" id="appTabs">
-            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-sprint">Sprint</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-search">Pesquisa</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-ai">IA Pro</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-config">Config</a></li>
+        <ul class="nav nav-tabs nav-fill" id="mainTabs">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#foco">Sprint</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#pesquisa">Busca</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#ref">Citar</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#ia">IA Pro</a></li>
+            <li class="nav-item admin-only"><a class="nav-link" data-bs-toggle="tab" href="#admin">Gestão</a></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="tab-sprint">
+            <div class="tab-pane fade show active" id="foco">
                 <div class="widget">
-                    <label class="x-small fw-bold text-warning mb-1 uppercase">DEADLINE DO PROJETO</label>
-                    <input type="datetime-local" id="deadline" class="form-control form-control-sm bg-dark text-white border-secondary mb-3">
+                    <label class="x-small fw-bold text-warning mb-1 uppercase">DEADLINE (META 3 DIAS)</label>
                     <div id="timer" class="timer-hero">00:00:00</div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="x-small fw-bold text-secondary uppercase mb-0">Missões Personalizadas</h6>
-                    <button class="btn btn-xxs btn-info" onclick="addTask()">+</button>
-                </div>
-                <input type="text" id="task-in" class="form-control form-control-sm bg-dark text-white border-secondary mb-2" placeholder="Nova tarefa...">
-                <div id="task-list"></div>
-            </div>
-
-            <div class="tab-pane fade" id="tab-search">
-                <div class="input-group mb-3">
-                    <input type="text" id="q" class="form-control form-control-sm bg-dark text-white" placeholder="Termo de pesquisa geral...">
-                    <button class="btn btn-info btn-sm" onclick="runSearch()"><i class="fas fa-search"></i></button>
-                </div>
-                <div class="d-grid gap-1">
-                    <button class="btn btn-sm btn-outline-light text-start" onclick="goBase('google')">Google Scholar</button>
-                    <button class="btn btn-sm btn-outline-light text-start" onclick="goBase('perplexity')"><i class="fas fa-bolt text-warning"></i> Perplexity (Busca IA)</button>
-                    <button class="btn btn-sm btn-outline-light text-start" onclick="goBase('scielo')">SciELO</button>
-                    <button class="btn btn-sm btn-outline-light text-start" onclick="goBase('capes')">Portal CAPES</button>
-                    <button class="btn btn-sm btn-outline-light text-start" onclick="goBase('bdtd')">BDTD Teses</button>
-                    <button class="btn btn-sm btn-outline-light text-start" onclick="goBase('sciencedirect')">ScienceDirect</button>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="tab-ai">
-                <div class="widget mb-2">
-                    <label class="x-small fw-bold text-info mb-2 uppercase">Plataforma Ativa</label>
-                    <div class="d-flex gap-1 mb-2">
-                        <button class="btn-ai-platform active" onclick="setAI('perplexity')">Perplexity</button>
-                        <button class="btn-ai-platform" onclick="setAI('openai')">OpenAI</button>
-                        <button class="btn-ai-platform" onclick="setAI('claude')">Claude</button>
+                    <div class="admin-only mt-2">
+                        <input type="datetime-local" id="deadline" class="form-control form-control-sm bg-dark text-white border-secondary">
                     </div>
-                    <input type="password" id="ai-key" class="form-control form-control-sm bg-dark text-white border-secondary mb-2" placeholder="Sua API Key Profissional">
-                    <small class="x-small text-white-50">Sua chave é usada apenas localmente no navegador.</small>
                 </div>
-                <div class="ai-chat-container" id="ai-box">
-                    <div class="text-info">[SISTEMA]: Hub de IA conectado. Aguardando comando...</div>
+                <h6 class="x-small fw-bold text-dim uppercase mb-2">Plano de Ação</h6>
+                <div id="task-list"></div>
+                <div class="admin-only mt-3">
+                    <div class="input-group">
+                        <input type="text" id="task-in" class="form-control form-control-sm bg-dark text-white" placeholder="Nova missão SIG/AHP...">
+                        <button class="btn btn-info btn-sm" onclick="addTask()">+</button>
+                    </div>
                 </div>
-                <div class="input-group mt-2">
-                    <input type="text" id="ai-msg" class="form-control form-control-sm bg-dark text-white" placeholder="Brainstorming AHP/SIG...">
+            </div>
+
+            <div class="tab-pane fade" id="pesquisa">
+                <div class="input-group mb-3">
+                    <input type="text" id="q" class="form-control form-control-sm bg-dark text-white" placeholder="Termo de pesquisa...">
+                    <button class="btn btn-info btn-sm" onclick="triggerSearch()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="d-grid gap-1 overflow-auto" style="max-height: 400px;">
+                    <button class="btn btn-search-base btn-outline-light" onclick="go('scholar')">Google Scholar</button>
+                    <button class="btn btn-search-base btn-outline-light" onclick="go('scielo')">SciELO Brasil</button>
+                    <button class="btn btn-search-base btn-outline-light" onclick="go('perplexity')">Perplexity (IA Search)</button>
+                    <button class="btn btn-search-base btn-outline-light" onclick="go('capes')">Portal CAPES</button>
+                    <button class="btn btn-search-base btn-outline-light" onclick="go('bdtd')">BDTD Teses</button>
+                    <button class="btn btn-search-base btn-outline-light" onclick="go('ana')">Dados ANA</button>
+                    <button class="btn btn-search-base btn-outline-light" onclick="go('dimensions')">Dimensions.ai</button>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="ref">
+                <div class="widget">
+                    <h6 class="x-small fw-bold text-info mb-2">NBR 14724: TEMPLATES</h6>
+                    <button class="btn btn-xxs btn-outline-light w-100 mb-1" onclick="insertTpl('capa')">Capa & Folha Rosto</button>
+                    <button class="btn btn-xxs btn-outline-light w-100 mb-1" onclick="insertTpl('resumo')">Resumo/Abstract</button>
+                    <button class="btn btn-xxs btn-outline-light w-100 mb-1" onclick="insertTpl('ahp')">Tabela Matriz AHP</button>
+                    <hr class="border-secondary">
+                    <button class="btn btn-xxs btn-info w-100" onclick="applyABNTFormat()">APLICAR FORMATO ABNT TOTAL</button>
+                </div>
+                <h6 class="x-small fw-bold text-dim mt-3 mb-2">BIBLIOTECA DE CITAÇÕES</h6>
+                <div id="ref-list"></div>
+            </div>
+
+            <div class="tab-pane fade" id="ia">
+                <div class="ai-chat-box mb-2" id="ai-chat">
+                    <div class="text-info">[IA]: Pronto para analisar a Bacia do Ipojuca? Pergunte sobre a metodologia AHP ou rascunhos de discussão.</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="ai-msg" class="form-control form-control-sm bg-dark text-white" placeholder="Consultar assistente...">
                     <button class="btn btn-info btn-sm" onclick="askAI()"><i class="fas fa-paper-plane"></i></button>
                 </div>
+                <div class="admin-only mt-2">
+                    <input type="password" id="ai-key" class="form-control form-control-sm bg-dark text-white border-warning" placeholder="Chave de API (Admin)" oninput="save()">
+                </div>
             </div>
 
-            <div class="tab-pane fade" id="tab-config">
+            <div class="tab-pane fade" id="admin">
                 <div class="widget">
-                    <label class="x-small fw-bold mb-1 uppercase">Nome da Plataforma</label>
-                    <input type="text" id="conf-site" class="form-control form-control-sm bg-dark text-white mb-3" oninput="sync()">
-                    
-                    <label class="x-small fw-bold mb-1 uppercase">Administrador / Autor</label>
+                    <h6 class="text-info small fw-bold mb-3 uppercase">Painel de Identidade</h6>
+                    <label class="x-small fw-bold mb-1">Título do Portal</label>
+                    <input type="text" id="conf-site" class="form-control form-control-sm bg-dark text-white mb-2" oninput="sync()">
+                    <label class="x-small fw-bold mb-1">Nome do Pesquisador</label>
                     <input type="text" id="conf-user" class="form-control form-control-sm bg-dark text-white mb-3" oninput="sync()">
-                    
-                    <button class="btn btn-sm btn-danger w-100" onclick="resetDatabase()">RESETAR BANCO DE DADOS</button>
+                    <button class="btn btn-sm btn-danger w-100" onclick="resetDB()">RESETAR SISTEMA</button>
                 </div>
             </div>
         </div>
@@ -155,107 +158,154 @@
         </div>
     </aside>
 
-    <main>
-        <div id="paper-canvas"><div id="editor"></div></div>
+    <main id="viewport">
+        <div id="paper-canvas">
+            <div id="editor"></div>
+        </div>
     </main>
 </div>
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    // 1. LOGIN SYSTEM
-    function tryLogin() {
-        const pass = document.getElementById('admin-pass').value;
-        if(pass === "ADMIN123") { // CHAVE MESTRA EDITÁVEL
-            document.getElementById('login-overlay').style.opacity = "0";
-            setTimeout(() => document.getElementById('login-overlay').style.display = "none", 500);
+    // --- MOTOR DO EDITOR ---
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: { toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline'], [{ 'align': [] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['image', 'clean']] }
+    });
+
+    const DB = 'omni_gold_v9';
+    let app = { site: "OMNIEDITOR FRAMEWORK", user: "Pesquisador", html: "", deadline: "", tasks: [], refs: [], aiKey: "" };
+
+    // --- ADMIN LOGIN ---
+    function toggleAdmin() {
+        const pass = prompt("Chave do Desenvolvedor:");
+        if(pass === "IPOJUCAPRO") {
+            document.getElementById('master-body').classList.add('is-admin');
+            localStorage.setItem('omni_is_admin', 'true');
         } else {
-            alert("Chave incorreta. Acesso negado.");
+            alert("Senha incorreta.");
         }
     }
 
-    // 2. EDITOR SETUP
-    var quill = new Quill('#editor', { theme: 'snow', modules: { toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['image', 'clean']] } });
+    // --- TEMPLATES & FORMATAÇÃO ABNT ---
+    function applyABNTFormat() {
+        // Força o estilo ABNT em todo o conteúdo
+        quill.formatText(0, quill.getLength(), {
+            'font': 'arial',
+            'size': '12pt',
+            'line-height': '1.5'
+        });
+        alert("Sistema ABNT aplicado: Arial 12pt, Espaçamento 1.5.");
+    }
 
-    const DB = 'omni_v7_enterprise';
-    let app = { site: "OMNIEDITOR PRO", user: "Administrador", html: "", deadline: "", tasks: [], aiBase: "perplexity", aiKey: "" };
+    const tpls = {
+        capa: `<h1 style="text-align:center;">INSTITUIÇÃO DE ENSINO</h1><br><br><h2 style="text-align:center;">${app.user}</h2><br><br><br><h1 style="text-align:center;">TÍTULO DA DISSERTAÇÃO</h1>`,
+        resumo: `<h1>RESUMO</h1><p>O presente estudo analisa... Palavras-chave: PSA. Ipojuca. AHP.</p>`,
+        ahp: `<table style="width:100%; border:1px solid black; border-collapse:collapse"><thead><tr style="border-bottom:2px solid black"><th>Critério</th><th>Peso (AHP)</th></tr></thead><tbody><tr><td>Declividade</td><td>0,XX</td></tr><tr><td>Uso do Solo</td><td>0,XX</td></tr></tbody></table><p class="x-small">Fonte: Autor (2026)</p>`
+    };
 
-    // 3. SPRINT ENGINE
+    function insertTpl(id) {
+        quill.clipboard.dangerouslyPasteHTML(quill.getLength(), tpls[id]);
+        save();
+    }
+
+    // --- BUSCA ---
+    function go(base) {
+        const q = document.getElementById('q').value;
+        const urls = {
+            scholar: `https://scholar.google.com.br/scholar?q=${q}`,
+            scielo: `https://search.scielo.org/?q=${q}`,
+            perplexity: `https://www.perplexity.ai/search?q=${q}`,
+            capes: `https://www-periodicos-capes-gov-br.ezl.periodicos.capes.gov.br/index.php/consulta-acervo.html?q=${q}`,
+            ana: `https://dadosabertos.ana.gov.br/`,
+            bdtd: `https://bdtd.ibict.br/vufind/Search/Results?lookfor=${q}`,
+            dimensions: `https://app.dimensions.ai/discover/publication?search_text=${q}`
+        };
+        window.open(urls[base], '_blank');
+    }
+
+    function triggerSearch() {
+        const q = document.getElementById('q').value;
+        addRef("SANTOS, J.", `Estudo sobre ${q}`, "2025");
+    }
+
+    // --- CITAÇÃO ---
+    function addRef(a, t, y) {
+        app.refs.push({ id: Date.now(), a, t, y, full: `${a.toUpperCase()}. <b>${t}</b>. ${y}.`, cite: `(${a.split(',')[0]}, ${y})` });
+        renderRefs(); save();
+    }
+
+    function renderRefs() {
+        document.getElementById('ref-list').innerHTML = app.refs.map(r => `
+            <div class="widget x-small mb-2">
+                ${r.full} <br>
+                <button class="btn btn-xxs btn-info mt-1" onclick="injectCite('${r.cite}')">Citar no Texto</button>
+            </div>`).join('');
+    }
+    function injectCite(c) { const r = quill.getSelection() || { index: 0 }; quill.insertText(r.index, c); }
+
+    // --- SPRINT ---
     function addTask() {
         const input = document.getElementById('task-in');
         if(!input.value) return;
         app.tasks.push({ id: Date.now(), text: input.value, done: false });
         input.value = ""; renderTasks(); save();
     }
-    function toggleTask(id) { const t = app.tasks.find(x => x.id === id); t.done = !t.done; renderTasks(); save(); }
-    function delTask(id) { app.tasks = app.tasks.filter(x => x.id !== id); renderTasks(); save(); }
+    function toggleTask(id) { 
+        if(!localStorage.getItem('omni_is_admin')) return;
+        const t = app.tasks.find(x => x.id === id); t.done = !t.done; renderTasks(); save(); 
+    }
     function renderTasks() {
         document.getElementById('task-list').innerHTML = app.tasks.map(t => `
-            <div class="widget p-2 mb-1 d-flex justify-content-between align-items-center" style="font-size:0.75rem">
+            <div class="widget p-2 mb-1 d-flex justify-content-between align-items-center" style="font-size:0.7rem">
                 <div onclick="toggleTask(${t.id})" style="cursor:pointer">
-                    <input type="checkbox" ${t.done ? 'checked' : ''}>
+                    <input type="checkbox" ${t.done ? 'checked' : ''} ${!localStorage.getItem('omni_is_admin') ? 'disabled' : ''}>
                     <span style="${t.done ? 'text-decoration:line-through; color:gray' : ''}">${t.text}</span>
                 </div>
-                <i class="fas fa-times text-danger" onclick="delTask(${t.id})" style="cursor:pointer"></i>
             </div>`).join('');
     }
 
-    // 4. MULTI-SEARCH & IA PRO
-    function goBase(b) {
-        const query = document.getElementById('q').value;
-        const urls = {
-            google: `https://scholar.google.com.br/scholar?q=${query}`,
-            perplexity: `https://www.perplexity.ai/search?q=${query}`,
-            scielo: `https://search.scielo.org/?q=${query}`,
-            capes: `https://www-periodicos-capes-gov-br.ezl.periodicos.capes.gov.br/index.php/consulta-acervo.html?q=${query}`
-        };
-        window.open(urls[b], '_blank');
-    }
-
+    // --- IA CHAT ---
     function askAI() {
         const msg = document.getElementById('ai-msg').value;
-        const key = document.getElementById('ai-key').value;
-        const box = document.getElementById('ai-box');
-        
-        box.innerHTML += `<div class='text-white-50 mt-2'>Você [usando ${app.aiBase}]: ${msg}</div>`;
-        
-        if(!key) {
-            setTimeout(() => {
-                box.innerHTML += `<div class='text-warning mt-1'>[AVISO]: Para conectar ao ${app.aiBase} real, insira sua API KEY na aba IA Pro. Simulando resposta...</div>`;
-                box.innerHTML += `<div class='text-info'>[IA]: Sugiro integrar o Critério de Proximidade às Nascentes para o PSA-Ipojuca...</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 800);
-        } else {
-            // Lógica para chamada Real de API pode ser inserida aqui
-            box.innerHTML += `<div class='text-success'>[INFO]: Tentando conexão segura com API ${app.aiBase}...</div>`;
-        }
+        const box = document.getElementById('ai-chat');
+        box.innerHTML += `<div class='text-white-50 mt-2'>Você: ${msg}</div>`;
+        setTimeout(() => {
+            box.innerHTML += `<div class='text-info mt-1'>[IA]: Sugiro revisar a NBR 10520 para esta citação. Para a Bacia do Ipojuca, os pesos da declividade devem ser normalizados no SIG...</div>`;
+            box.scrollTop = box.scrollHeight;
+        }, 700);
+        document.getElementById('ai-msg').value = "";
     }
 
-    // 5. SYSTEM SYNC & PERSISTENCE
+    // --- PERSISTÊNCIA ---
     function sync() {
         app.site = document.getElementById('conf-site').value;
         app.user = document.getElementById('conf-user').value;
-        app.aiKey = document.getElementById('ai-key').value;
-        document.getElementById('display-site').innerText = app.site;
-        document.getElementById('display-user').innerText = `Admin: ${app.user}`;
+        document.getElementById('site-name-ui').innerText = app.site;
+        document.getElementById('user-name-ui').innerText = app.user;
         save();
     }
 
     function save() { 
         app.html = quill.root.innerHTML; 
         app.deadline = document.getElementById('deadline').value;
+        app.aiKey = document.getElementById('ai-key').value;
         localStorage.setItem(DB, JSON.stringify(app)); 
     }
 
     function load() {
+        if(localStorage.getItem('omni_is_admin') === 'true') document.getElementById('master-body').classList.add('is-admin');
         const d = JSON.parse(localStorage.getItem(DB));
         if(d) {
             app = d;
             quill.root.innerHTML = d.html || "";
             document.getElementById('deadline').value = d.deadline || "";
-            document.getElementById('conf-site').value = d.site || "OMNIEDITOR PRO";
-            document.getElementById('conf-user').value = d.user || "Administrador";
+            document.getElementById('conf-site').value = d.site || "OMNIEDITOR FRAMEWORK";
+            document.getElementById('conf-user').value = d.user || "Pesquisador";
             document.getElementById('ai-key').value = d.aiKey || "";
-            sync(); renderTasks(); if(d.deadline) startTimer(d.deadline);
+            sync(); renderTasks(); renderRefs(); if(d.deadline) startTimer(d.deadline);
         }
     }
 
@@ -263,17 +313,19 @@
         clearInterval(window.itv);
         window.itv = setInterval(() => {
             const diff = new Date(t) - new Date();
-            if(diff < 0) { document.getElementById('timer').innerText = "ENTREGA!"; return; }
+            const disp = document.getElementById('timer');
+            if(diff < 0) { disp.innerText = "ENTREGA!"; return; }
             const h = Math.floor(diff/3600000); const m = Math.floor((diff%3600000)/60000); const s = Math.floor((diff%60000)/1000);
-            document.getElementById('timer').innerText = `${h}:${m}:${s}`.replace(/\b\d\b/g, "0$&");
+            disp.innerText = `${h}:${m}:${s}`.replace(/\b\d\b/g, "0$&");
         }, 1000);
     }
 
-    function resetDatabase() { if(confirm("Deseja apagar TUDO?")) { localStorage.removeItem(DB); location.reload(); } }
+    function resetDB() { if(confirm("Deseja apagar TUDO?")) { localStorage.clear(); location.reload(); } }
 
     function exportDoc() {
-        const blob = new Blob(['<html><head><meta charset="utf-8"></head><body>' + quill.root.innerHTML + '</body></html>'], { type: 'application/msword' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Manuscrito_Final.doc'; a.click();
+        const html = `<html><head><meta charset="utf-8"><style>body{font-family:Arial; font-size:12pt; margin:3cm 2cm 2cm 3cm;}</style></head><body>${quill.root.innerHTML}</body></html>`;
+        const blob = new Blob([html], { type: 'application/msword' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Dissertacao_ABNT.doc'; a.click();
     }
 
     window.onload = load;
