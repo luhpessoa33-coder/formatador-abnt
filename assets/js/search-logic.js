@@ -17,7 +17,7 @@ async function buscarCientificoV3() {
             const ano = item.published ? item.published['date-parts'][0][0] : "2025";
             const titulo = item.title ? item.title[0] : "Sem título";
             const div = document.createElement('div');
-            div.className = 'card mb-2 p-2 bg-dark text-white border-start border-primary border-4 small shadow-sm';
+            div.className = 'card mb-2 p-2 bg-dark text-white border-start border-primary border-4 small';
             div.innerHTML = `<strong>${titulo.substring(0, 60)}...</strong><br><span>${family} (${ano})</span><button class="btn btn-xxs btn-primary mt-1 w-100" onclick="registrarCitar('${family}', '${ano}', '${titulo}')">+ Citar</button>`;
             area.appendChild(div);
         });
