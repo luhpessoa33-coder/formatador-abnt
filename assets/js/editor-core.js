@@ -1,99 +1,141 @@
-// Configuração de Templates
-const TEMPLATES = {
-    ifpe: { font: 'Arial', size: '12pt', line: '1.5', margins: [3, 3, 2, 2] },
-    abnt_generico: { font: 'Times New Roman', size: '12pt', line: '1.5', margins: [3, 3, 2, 2] },
-    apa: { font: 'Times New Roman', size: '12pt', line: '2.0', margins: [2.5, 2.5, 2.5, 2.5] }
-};
+/**
+ * ACADEMICHUB PRO V3.0 - Módulo de Gestão e Índices
+ */
 
-let editor;
+// 1. ATUALIZAR PROGRESSO POR CAPÍTULOS (REFINADO)
+function atualizarProgressoCapitulos() {
+    const texto = editor.getText();
+    const html = editor.root.innerHTML;
+    
+    const metas = [
+        { id: 'intro', nome: 'Introdução', palavras: 800, chaves: ['introdução', 'objetivo', 'justificativa'] },
+        { id: 'metodo', nome: 'Metodologia', palavras: 1200, chaves: ['metodologia', 'ahp', 'área de estudo', 'materiais'] },
+        { id: 'res', nome: 'Resultados', palavras: 1500, chaves: ['resultados', 'discussão', 'análise', 'conclusão'] }
+    ];
 
-// Inicialização
-document.addEventListener('DOMContentLoaded', () => {
-    editor = new Quill('#main-editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['image', 'link'],
-                ['clean']
-            ]
-        }
+    let htmlProgresso = "";
+
+    metas.forEach(m => {
+        let score = 0;
+        // Verifica se o título do capítulo existe no HTML
+        const temTitulo = m.chaves.some(key => html.toLowerCase().includes(key));
+        if (temTitulo) score += 40;
+
+        // Verifica volume de palavras específicas para aquele contexto
+        const totalPalavras = texto.split(/\s+/).length;
+        if (totalPalavras > m.palavras) score += 60;
+        else score += (totalPalavras / m.palavras) * 60;
+
+        const final = Math.min(Math.round(score), 100);
+        
+        htmlProgresso += `
+            <div class="x-small mb-1 d-flex justify-content-between text-white">
+                <span>${m.nome}</span> <span>${final}%</span>
+            </div>
+            <div class="progress mb-2" style="height: 5px; background: #333;">
+                <div class="progress-bar ${final < 100 ? 'bg-info' : 'bg-success'}" style="width: ${final}%"></div>
+            </div>
+        `;
     });
 
-    carregarEstado();
-    setInterval(autosave, 2000);
-});
-
-// Importação com Formatação Automática
-async function processarImportacaoPrincipal() {
-    const file = document.getElementById('fileInput').files[0];
-    if(!file) return Swal.fire('Erro', 'Selecione o arquivo .docx', 'error');
-
-    Swal.showLoading();
-    
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-        const result = await mammoth.convertToHtml({ arrayBuffer: e.target.result });
-        
-        // Injeta o conteúdo
-        editor.root.innerHTML = result.value;
-        
-        // IA: Aplica Formatação Automática baseada no Template
-        aplicarTemplate();
-        
-        Swal.fire('Sucesso', 'Conteúdo importado e formatado via IA Acadêmica.', 'success');
-        irParaEditor();
-    };
-    reader.readAsArrayBuffer(file);
+    document.getElementById('listaProgresso').innerHTML = htmlProgresso;
+    gerarSumarioPreview(); // Chama a atualização do sumário junto
+    identificarIlustracoes(); // Identifica figuras e tabelas
 }
 
-function aplicarTemplate() {
-    const tName = document.getElementById('masterTemplate').value;
-    const config = TEMPLATES[tName];
-    
-    const paper = document.getElementById('paper-A4');
-    paper.style.paddingTop = config.margins[0] + "cm";
-    paper.style.paddingLeft = config.margins[1] + "cm";
-    paper.style.paddingRight = config.margins[2] + "cm";
-    paper.style.paddingBottom = config.margins[3] + "cm";
-    
-    editor.root.style.fontFamily = config.font;
-    editor.root.style.fontSize = config.size;
-    editor.root.style.lineHeight = config.line;
-    
-    verificarLimitePaginas();
+// 2. CRONOGRAMA 72H DINÂMICO
+function configurarCronograma() {
+    const prazo = document.getElementById('inputPrazo').value;
+    localStorage.setItem('prazo_dissertacao', prazo);
 }
 
-function verificarLimitePaginas() {
-    const height = editor.root.scrollHeight;
-    const pageHeightPx = 1122; // Aprox pixels para 29.7cm a 96dpi
-    const numPages = Math.ceil(height / pageHeightPx);
+function iniciarCountdown() {
+    setInterval(() => {
+        const prazoFinal = new Date(localStorage.getItem('prazo_dissertacao'));
+        const agora = new Date();
+        const diff = prazoFinal - agora;
+
+        if (diff > 0) {
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('countdownDisplay').innerText = 
+                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        } else {
+            document.getElementById('countdownDisplay').innerText = "PRAZO ESGOTADO";
+            document.getElementById('countdownDisplay').classList.replace('text-warning', 'text-danger');
+        }
+    }, 1000);
+}
+
+// 3. IDENTIFICAÇÃO DE SUMÁRIO, FIGURAS E TABELAS
+function gerarSumarioPreview() {
+    const titulos = editor.root.querySelectorAll('h1, h2, h3');
+    const area = document.getElementById('sumarioPreview');
     
-    const monitor = document.getElementById('pageMonitor');
-    monitor.innerText = `Páginas: ${numPages} / 300`;
-    
-    if(numPages > 300) {
-        monitor.className = "badge bg-danger animate__animated animate__shakeX";
-        Swal.fire('Limite Atingido', 'O trabalho excedeu 300 páginas!', 'warning');
-    } else {
-        monitor.className = "badge bg-success";
+    if (titulos.length === 0) {
+        area.innerText = "Use Título 1 e 2 no menu para gerar o sumário.";
+        return;
     }
+
+    let lista = "<ul class='list-unstyled mb-0'>";
+    titulos.forEach(t => {
+        const nivel = t.tagName === 'H1' ? '' : 'ps-3';
+        lista += `<li class="${nivel} border-bottom border-secondary border-opacity-25 py-1">
+            <i class="fas fa-chevron-right x-small"></i> ${t.innerText}
+        </li>`;
+    });
+    area.innerHTML = lista + "</ul>";
 }
 
-function autosave() {
-    localStorage.setItem('ipojuca_master_v3', editor.root.innerHTML);
-    document.getElementById('statusSalvo').innerHTML = `<i class="fas fa-check"></i> Sincronizado: ${new Date().toLocaleTimeString()}`;
-    verificarLimitePaginas();
+function identificarIlustracoes() {
+    const texto = editor.getText();
+    const area = document.getElementById('listaIlustracoes');
+    
+    // Regex para encontrar "Figura X:" ou "Tabela X:"
+    const figuras = texto.match(/Figura\s\d+[:.]/gi) || [];
+    const tabelas = texto.match(/Tabela\s\d+[:.]/gi) || [];
+
+    area.innerHTML = `
+        <div class="d-flex justify-content-between"><span>Figuras:</span> <b>${figuras.length}</b></div>
+        <div class="d-flex justify-content-between"><span>Tabelas:</span> <b>${tabelas.length}</b></div>
+    `;
 }
 
-function carregarEstado() {
-    const salvo = localStorage.getItem('ipojuca_master_v3');
-    if(salvo) editor.root.innerHTML = salvo;
+// 4. INSERÇÃO DE IMAGENS COM LEGENDA ABNT
+function inserirImagemComLegenda() {
+    Swal.fire({
+        title: 'Inserir Ilustração ABNT',
+        html: `
+            <input type="text" id="legenda" class="form-control mb-2" placeholder="Título da Figura (Ex: Mapa de Erodibilidade)">
+            <input type="text" id="fonte" class="form-control" placeholder="Fonte (Ex: Autor, 2026)">
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Preparar Espaço'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const legenda = document.getElementById('legenda').value;
+            const fonte = document.getElementById('fonte').value;
+            const range = editor.getSelection() || { index: 0 };
+            
+            const template = `
+                <p style="text-align: center;"><strong>Figura X: ${legenda}</strong></p>
+                <p style="text-align: center;">[CLIQUE NO ÍCONE DE IMAGEM ACIMA PARA INSERIR O MAPA AQUI]</p>
+                <p style="text-align: center; font-size: 10pt;">Fonte: ${fonte}</p>
+            `;
+            editor.clipboard.dangerouslyPasteHTML(range.index, template);
+        }
+    });
 }
 
-function irParaEditor() {
-    const tab = new bootstrap.Tab(document.querySelector('[data-bs-target="#tab-editor"]'));
-    tab.show();
+// INTEGRAÇÃO NO AUTOSAVE
+function loopPrincipal() {
+    salvarLocalmente(); // Função que já criamos
+    atualizarProgressoCapitulos();
 }
+
+setInterval(loopPrincipal, 3000);
+window.onload = () => {
+    carregarBackup();
+    iniciarCountdown();
+};
