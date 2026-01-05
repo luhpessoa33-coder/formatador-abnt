@@ -1,123 +1,234 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AcademicHub Pro V3.0 | Estação Ipojuca Ultra</title>
+    <title>Editor Acadêmico ABNT - Ipojuca Project</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://unpkg.com/html-to-docx@1.2.4/dist/html-to-docx.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-width: 320px;
+            --a4-width: 210mm;
+            --a4-height: 297mm;
+        }
+
+        body { background-color: #1a1a1a; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        /* Estilização da Folha A4 */
+        #editor-container {
+            height: calc(100vh - 20px);
+            overflow-y: auto;
+            background: #333;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        #paper-A4 {
+            width: var(--a4-width);
+            min-height: var(--a4-height);
+            padding: 3cm 2cm 2cm 3cm; /* Margens ABNT NBR 14724 */
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        /* Sidebar */
+        aside { height: 100vh; overflow-y: auto; background: #212529; }
+        .x-small { font-size: 0.75rem; }
+        .btn-xxs { padding: 4px 8px; font-size: 0.7rem; text-transform: uppercase; font-weight: bold; }
+        
+        #main-editor {
+            border: none !important;
+            font-family: 'Arial', sans-serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            height: auto;
+            color: black;
+        }
+
+        .ql-toolbar { 
+            position: sticky; top: 0; z-index: 1000; 
+            background: #f8f9fa !important; border: none !important;
+            border-bottom: 1px solid #ddd !important;
+            display: flex; justify-content: center;
+        }
+
+        /* Checkbox Custom */
+        .form-check-input:checked { background-color: #0dcaf0; border-color: #0dcaf0; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #222; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+    </style>
 </head>
-<body class="bg-dark text-light overflow-hidden">
+<body>
 
-<nav class="navbar navbar-dark bg-primary shadow-lg py-1">
-    <div class="container-fluid">
-        <span class="navbar-brand fw-bold small"><i class="fas fa-microchip"></i> ACADEMIC AI V3.0 [MODO DISSERTAÇÃO]</span>
-        <div class="d-flex align-items-center gap-3">
-            <div id="pageMonitor" class="badge bg-danger">Páginas: 1 / 300</div>
-            <div id="statusSalvo" class="small text-white-50"><i class="fas fa-sync fa-spin"></i> Inicializando...</div>
-            <button class="btn btn-sm btn-warning fw-bold" onclick="abrirAdmin()"><i class="fas fa-user-shield"></i> MASTER</button>
-        </div>
-    </div>
-</nav>
-
-<div class="d-flex" style="height: calc(100vh - 40px);">
-    <aside class="bg-dark border-end border-secondary p-2" style="width: 250px;">
-        <div class="nav flex-column nav-pills small" id="v3Tabs" role="tablist">
-            <button class="nav-link active mb-2" data-bs-toggle="pill" data-bs-target="#tab-import"><i class="fas fa-file-upload"></i> 1. Importar Projeto</button>
-            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-editor"><i class="fas fa-edit"></i> 2. Escritório A4</button>
-            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-ia"><i class="fas fa-robot"></i> 3. Otimizador IA</button>
-            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-biblio"><i class="fas fa-book"></i> 4. Bibliografia</button>
-            <button class="nav-link mb-2" data-bs-toggle="pill" data-bs-target="#tab-export"><i class="fas fa-file-export"></i> 5. Exportação Final</button>
+<div class="d-flex"> 
+    <aside class="text-white p-3 shadow-lg" style="width: var(--sidebar-width);">
+        <div class="text-center mb-4">
+            <h5 class="text-info fw-bold mb-0">PROJETO IPOJUCA</h5>
+            <small class="text-white-50">Editor de Dissertação ABNT</small>
         </div>
 
-        <hr class="text-secondary">
-        
-        <div class="template-box p-2 bg-secondary bg-opacity-10 rounded">
-            <label class="x-small fw-bold text-uppercase">Configuração de Normas</label>
-            <select id="masterTemplate" class="form-select form-select-sm bg-dark text-white border-secondary mt-1" onchange="aplicarTemplate()">
-                <option value="ifpe">IFPE - Dissertação</option>
-                <option value="abnt_generico">ABNT - TCC Geral</option>
-                <option value="apa">Normas APA 7ª Ed.</option>
-                <option value="vancouver">Vancouver (Saúde)</option>
-            </select>
+        <div class="mb-4 p-3 bg-black bg-opacity-50 rounded border border-warning">
+            <h6 class="text-warning x-small fw-bold"><i class="fas fa-clock me-2"></i>CONTAGEM REGRESSIVA</h6>
+            <input type="datetime-local" id="inputPrazo" class="form-control form-control-sm bg-dark text-white border-secondary mb-2">
+            <div id="countdownDisplay" class="h4 text-center font-monospace text-warning">00:00:00</div>
         </div>
-        
-        <div class="mt-4 p-2 border border-warning rounded shadow-sm">
-            <h6 class="text-warning small"><i class="fas fa-exclamation-triangle"></i> Meta: 3 Dias</h6>
-            <div class="progress" style="height: 5px;">
-                <div class="progress-bar bg-warning" style="width: 65%"></div>
+
+        <div class="mb-4 p-2 border border-secondary rounded bg-dark">
+            <h6 class="text-info x-small fw-bold"><i class="fas fa-layer-group me-2"></i>FERRAMENTAS AHP</h6>
+            <button class="btn btn-xxs btn-outline-info w-100 mb-2" onclick="inserirTabelaAHP()">Inserir Tabela de Pesos</button>
+            <button class="btn btn-xxs btn-outline-warning w-100" onclick="inserirTextoResultados()">Inserir Intro Resultados</button>
+        </div>
+
+        <div class="mb-4">
+            <h6 class="text-white-50 x-small fw-bold border-bottom border-secondary pb-1">PROGRESSO ABNT</h6>
+            <div id="listaProgresso" class="x-small mt-2"></div>
+        </div>
+
+        <div class="mb-4">
+            <h6 class="text-white-50 x-small fw-bold border-bottom border-secondary pb-1">SUMÁRIO DINÂMICO</h6>
+            <div id="sumarioPreview" class="x-small text-white-50 mt-2" style="max-height: 150px; overflow-y: auto;">
+                Aguardando títulos...
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h6 class="text-white-50 x-small fw-bold border-bottom border-secondary pb-1">FIGURAS E TABELAS</h6>
+            <div id="listaIlustracoes" class="x-small text-white-50 mt-2">
+                Nenhuma detectada.
             </div>
         </div>
     </aside>
 
-    <main class="flex-grow-1 overflow-auto bg-secondary bg-opacity-25 p-4">
-        <div class="tab-content" id="v3TabsContent">
-            
-            <div class="tab-pane fade show active" id="tab-import">
-                <div class="card bg-dark border-secondary p-5 text-center">
-                    <i class="fas fa-cloud-upload-alt fa-4x text-primary mb-3"></i>
-                    <h2>Carregar Manuscrito</h2>
-                    <p>Suba o seu Word da Bacia do Ipojuca. A IA fará o "re-mapping" para as normas do IFPE.</p>
-                    <input type="file" id="fileInput" class="form-control w-50 mx-auto my-4">
-                    <button class="btn btn-primary btn-lg px-5" onclick="processarImportacaoPrincipal()">Processar e Formatar</button>
+    <main class="flex-grow-1">
+        <div id="editor-container">
+            <div id="paper-A4">
+                <div id="main-editor">
+                    <h1 style="text-align: center;">RESULTADOS E DISCUSSÃO</h1>
+                    <p>Clique nos botões laterais para inserir os modelos de texto e tabelas para a Bacia do Rio Ipojuca.</p>
                 </div>
             </div>
-
-            <div class="tab-pane fade" id="tab-editor">
-                <div id="editor-container" class="d-flex justify-content-center">
-                    <div id="paper-A4" class="bg-white shadow-2xl">
-                        <div id="main-editor"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="tab-ia">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="card bg-dark border-primary p-3">
-                            <h6><i class="fas fa-vial"></i> Validação AHP</h6>
-                            <p class="x-small">Verifica se os critérios (Declividade, Solo, etc.) estão citados corretamente.</p>
-                            <button class="btn btn-sm btn-outline-primary" onclick="iaAnalisarMetodologia()">Analisar Agora</button>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div id="iaConsole" class="bg-black p-3 rounded font-monospace small text-success" style="height: 400px; overflow-y: auto;">
-                            > Sistema IA pronto para análise...
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 </div>
 
-<div class="modal fade" id="modalAdmin" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark border-warning">
-            <div class="modal-header"><h5 class="modal-title text-warning">Painel de Gestão Master</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-            <div class="modal-body">
-                <div id="adminData" class="row"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script src="assets/js/editor-core.js"></script>
-<script src="assets/js/ai-logic.js"></script>
-<script src="assets/js/search-logic.js"></script>
+<script>
+    // 1. Inicializar Quill
+    var quill = new Quill('#main-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ 'align': [] }],
+                ['image', 'clean']
+            ]
+        }
+    });
 
-</body>
-</html>
+    const STORAGE_KEY = 'dissertacao_ipojuca_v1';
+
+    // 2. Tabela AHP Sugerida
+    function inserirTabelaAHP() {
+        const tabela = `
+            <p style="text-align: center;"><strong>Tabela 1: Pesos dos subcritérios para a Bacia do Rio Ipojuca.</strong></p>
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
+                <thead>
+                    <tr style="border-top: 2px solid black; border-bottom: 1px solid black; background: #f2f2f2;">
+                        <th style="padding: 8px; text-align: left;">Subcritério</th>
+                        <th style="padding: 8px; text-align: center;">Peso (AHP)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Declividade</td><td style="text-align: center;">0.XX</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Proximidade à Floresta</td><td style="text-align: center;">0.XX</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Cobertura Vegetal</td><td style="text-align: center;">0.XX</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Proximidade a Nascentes</td><td style="text-align: center;">0.XX</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 2px solid black;">Erodibilidade do Solo</td><td style="text-align: center;">0.XX</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 10pt;">Fonte: Elaborado pelo autor (2026).</p>
+        `;
+        quill.clipboard.dangerouslyPasteHTML(quill.getLength(), tabela);
+    }
+
+    // 3. Texto de Introdução aos Resultados
+    function inserirTextoResultados() {
+        const texto = `
+            <h2>4. RESULTADOS</h2>
+            <p>A aplicação da Análise Multicritério (AHP) permitiu a integração espacial dos cinco subcritérios selecionados para a Bacia do Rio Ipojuca. Através da normalização das variáveis físicas e ambientais, foi possível identificar áreas com diferentes potenciais para o Pagamento por Serviços Ambientais (PSA) Hídricos.</p>
+            <p>Os critérios <strong>Declividade, Proximidade à Floresta, Cobertura Vegetal, Proximidade a Nascentes e Erodibilidade do Solo</strong> foram ponderados em matriz paritária, refletindo a importância da manutenção da qualidade e quantidade de água na bacia. A seguir, apresentam-se os mapas temáticos gerados e a síntese das áreas prioritárias.</p>
+        `;
+        quill.clipboard.dangerouslyPasteHTML(quill.getLength(), texto);
+    }
+
+    // 4. Funções de Salvamento e Interface
+    function salvar() {
+        const data = {
+            html: quill.root.innerHTML,
+            deadline: document.getElementById('inputPrazo').value,
+            checks: Array.from(document.querySelectorAll('#listaProgresso input')).map(i => i.checked)
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function carregar() {
+        const salvo = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (salvo) {
+            quill.root.innerHTML = salvo.html;
+            document.getElementById('inputPrazo').value = salvo.deadline;
+            iniciarTimer(salvo.deadline);
+            // Restaurar checks após gerar lista
+            setTimeout(() => {
+                const checks = document.querySelectorAll('#listaProgresso input');
+                salvo.checks.forEach((v, i) => { if(checks[i]) checks[i].checked = v; });
+            }, 100);
+        }
+    }
+
+    function iniciarTimer(data) {
+        clearInterval(window.timer);
+        window.timer = setInterval(() => {
+            const diff = new Date(data) - new Date();
+            if (diff < 0) {
+                document.getElementById('countdownDisplay').innerText = "CONCLUÍDO";
+                return;
+            }
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('countdownDisplay').innerText = `${d}d ${h}h ${m}m ${s}s`;
+        }, 1000);
+    }
+
+    // 5. Setup Inicial
+    const itens = ["Capa/Folha Rosto", "Resumo/Abstract", "Introdução", "Metodologia AHP", "Resultados Ipojuca", "Discussão", "Referências"];
+    const containerCheck = document.getElementById('listaProgresso');
+    itens.forEach(it => {
+        containerCheck.innerHTML += `<div class="form-check"><input class="form-check-input" type="checkbox" onchange="salvar()"> <label class="form-check-label">${it}</label></div>`;
+    });
+
+    quill.on('text-change', () => {
+        salvar();
+        const text = quill.getText();
+        // Atualizar Ilustrações (simples)
+        const figCount = (text.match(/Tabela|Figura/g) || []).length;
+        document.getElementById('listaIlustracoes').innerText = `${figCount} elemento(s) detectado(s).`;
+    });
+
+    document.getElementById('inputPrazo').onchange = (e) => { iniciarTimer(e.target.value); salvar(); };
+    window.onload = carregar;
+</script>
 
 </body>
 </html>
