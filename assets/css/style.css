@@ -1,37 +1,43 @@
-/* Design Industrial Científico */
-:root { --primary-color: #0d6efd; }
-body { font-family: 'Inter', sans-serif; transition: 0.3s; overflow-x: hidden; }
-body.dark-mode { background-color: #0f1113 !important; }
-
-#editor-viewport {
-    height: 78vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-    background: #525659;
+:root {
+    --abnt-top: 30mm;
+    --abnt-left: 30mm;
+    --abnt-right: 20mm;
+    --abnt-bottom: 20mm;
 }
 
+body { font-family: 'Inter', sans-serif; }
+
+.x-small { font-size: 0.7rem; }
+
+/* O Papel A4 */
 #paper-A4 {
+    width: 210mm;
+    min-height: 297mm;
+    padding: var(--abnt-top) var(--abnt-right) var(--abnt-bottom) var(--abnt-left);
+    margin-bottom: 50px;
     background: white;
-    width: 21cm;
-    min-height: 29.7cm;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-    margin-bottom: 60px;
+    color: black;
+    transition: all 0.3s ease;
 }
 
-/* Margens Estritas ABNT */
-.ql-editor {
-    padding: 3cm 2cm 2cm 3cm !important;
-    font-family: 'Times New Roman', serif;
+/* Regra das 300 páginas */
+#main-editor {
+    font-family: "Arial", sans-serif;
     font-size: 12pt;
     line-height: 1.5;
-    text-align: justify;
-    color: #000;
+    min-height: 250mm;
 }
 
-#paper-A4.over-limit { border: 8px solid #dc3545 !important; opacity: 0.8; }
-.nav-tabs .nav-link { border: none; font-weight: bold; opacity: 0.6; color: white; transition: 0.3s; }
-.nav-tabs .nav-link.active { border-bottom: 4px solid #ffc107 !important; opacity: 1; background: transparent !important; }
-.btn-xxs { padding: 1px 5px; font-size: 0.65rem; }
+.limit-reached {
+    border: 5px solid red !important;
+}
+
+/* Interface */
+.nav-pills .nav-link { color: #ccc; border-radius: 4px; transition: 0.2s; }
+.nav-pills .nav-link.active { background-color: #0d6efd !important; }
+.nav-pills .nav-link:hover { background: rgba(255,255,255,0.1); }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #1a1a1a; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
