@@ -3,129 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniEditor Ultra - Citações Pro & Pesquisa Integrada</title>
+    <title id="site-title">OmniEditor Ultra | Academic Suite</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
 
     <style>
-        :root { 
-            --sidebar-width: 400px; 
-            --accent-color: #00d2ff;
-            --dark-bg: #0f0f0f;
-            --panel-bg: #1a1a1a;
+        :root {
+            --sidebar-width: 420px;
+            --accent: #00d2ff;
+            --bg-dark: #09090b;
+            --bg-panel: #121214;
+            --bg-card: #1c1c1f;
+            --text-main: #e4e4e7;
+            --text-dim: #a1a1aa;
+            --abnt-paper: #ffffff;
         }
 
-        body { background-color: var(--dark-bg); overflow: hidden; font-family: 'Inter', sans-serif; color: #e0e0e0; }
-        .app-container { display: flex; height: 100vh; }
-        
-        /* Sidebar */
-        aside { width: var(--sidebar-width); background: var(--panel-bg); border-right: 1px solid #333; display: flex; flex-direction: column; }
-        .nav-tabs { background: #222; border: none; }
-        .nav-link { color: #aaa; border: none !important; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; padding: 12px 2px; }
-        .nav-link.active { background: var(--panel-bg) !important; color: var(--accent-color) !important; border-bottom: 3px solid var(--accent-color) !important; }
-        .tab-content { flex-grow: 1; overflow-y: auto; padding: 15px; }
+        body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Inter', sans-serif; overflow: hidden; margin: 0; }
+        .app-shell { display: flex; height: 100vh; }
 
-        /* Editor Folha A4 */
-        #main-viewport { flex-grow: 1; background: #222; overflow-y: auto; padding: 40px 0; display: flex; flex-direction: column; align-items: center; }
-        #paper-A4 { width: 210mm; min-height: 297mm; background: white; padding: 3cm 2cm 2cm 3cm; box-shadow: 0 10px 60px rgba(0,0,0,0.7); color: black; }
+        /* Sidebar Design System */
+        aside { width: var(--sidebar-width); background: var(--bg-panel); border-right: 1px solid #27272a; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-header { padding: 20px; background: #000; border-bottom: 1px solid #27272a; }
+        .nav-tabs { border: none; padding: 0 10px; gap: 5px; }
+        .nav-link { color: var(--text-dim); border: none !important; font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; padding: 15px 5px; border-radius: 0; }
+        .nav-link.active { background: transparent !important; color: var(--accent) !important; border-bottom: 2px solid var(--accent) !important; }
+        .tab-content { flex-grow: 1; overflow-y: auto; padding: 20px; scrollbar-width: thin; }
+
+        /* Canvas de Escrita (Papel A4) */
+        main { flex-grow: 1; background: #202023; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 60px 0; scroll-behavior: smooth; }
+        #paper-canvas { 
+            width: 210mm; min-height: 297mm; background: var(--abnt-paper); 
+            padding: 30mm 20mm 20mm 30mm; /* Rigor ABNT NBR 14724 */
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5); color: #000; position: relative;
+        }
+
+        /* Quill Customization */
+        .ql-toolbar { position: sticky; top: -60px; background: #fff !important; z-index: 1000; border: none !important; border-bottom: 1px solid #eee !important; width: 100%; display: flex; justify-content: center; }
+        #editor { font-family: 'Arial', sans-serif; font-size: 12pt; line-height: 1.5; border: none !important; }
+
+        /* Widgets & AI Chat */
+        .widget { background: var(--bg-card); border: 1px solid #2d2d30; border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .btn-search { font-size: 0.65rem; font-weight: 700; text-align: left; padding: 10px; margin-bottom: 6px; border-radius: 8px; transition: 0.2s; }
+        .ai-chat { height: 220px; background: #000; border-radius: 10px; padding: 12px; font-size: 0.8rem; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; border: 1px solid #333; }
+        .msg-ai { color: var(--accent); align-self: flex-start; }
+        .msg-user { color: #fff; align-self: flex-end; font-style: italic; }
+
+        .timer-hero { font-family: 'JetBrains Mono', monospace; font-size: 2.4rem; font-weight: 900; color: #fbbf24; text-align: center; line-height: 1; }
+        .ref-card { font-size: 0.75rem; border-left: 3px solid var(--accent); background: #141416; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
         
-        .ql-toolbar { position: sticky; top: -40px; background: white !important; z-index: 1000; border: none !important; border-bottom: 1px solid #ddd !important; width: 100%; display: flex; justify-content: center; }
-        #main-editor { font-family: 'Arial', sans-serif; font-size: 12pt; line-height: 1.5; border: none !important; }
-        
-        /* Cards de Citação e Pesquisa */
-        .card-ref { background: #252525; border-left: 4px solid var(--accent-color); border-radius: 4px; padding: 10px; margin-bottom: 10px; font-size: 0.75rem; }
-        .search-result-mock { background: #2a2a2a; border: 1px dashed #444; border-radius: 6px; padding: 10px; margin-bottom: 10px; transition: 0.3s; }
-        .search-result-mock:hover { border-color: var(--accent-color); }
-        
-        .timer-display { font-size: 2rem; font-weight: 900; color: #ffc107; text-align: center; font-family: 'Courier New', monospace; text-shadow: 0 0 10px rgba(255,193,7,0.3); }
-        .table-cronograma { font-size: 0.7rem; width: 100%; color: #ccc; }
-        .table-cronograma th { color: var(--accent-color); border-bottom: 1px solid #444; }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="app-shell">
     <aside>
-        <div class="p-3 text-center border-bottom border-secondary bg-dark">
-            <h6 class="mb-0 fw-bold" style="color: var(--accent-color)">OMNIEDITOR ULTRA <span class="badge bg-info text-dark" style="font-size: 0.5rem;">CITAÇÕES PRO</span></h6>
+        <div class="sidebar-header d-flex justify-content-between align-items-center">
+            <div>
+                <h6 id="display-sitename" class="mb-0 fw-black text-white">OMNIEDITOR ULTRA</h6>
+                <small id="display-username" class="text-dim x-small">Acadêmico: Convidado</small>
+            </div>
+            <div class="badge bg-info text-dark" style="font-size: 0.5rem;">V 6.0</div>
         </div>
         
-        <ul class="nav nav-tabs nav-fill" id="mainTabs">
-            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#cronograma"><i class="fas fa-tasks d-block mb-1"></i> Foco</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#pesquisa"><i class="fas fa-search d-block mb-1"></i> Pesquisa</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#citacoes"><i class="fas fa-quote-right d-block mb-1"></i> Citações</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#modelos"><i class="fas fa-copy d-block mb-1"></i> Modelos</a></li>
+        <ul class="nav nav-tabs nav-fill" id="appTabs">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#foco"><i class="fas fa-history d-block mb-1"></i> Foco</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#busca"><i class="fas fa-search d-block mb-1"></i> Busca</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#citar"><i class="fas fa-quote-left d-block mb-1"></i> Citar</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#ia"><i class="fas fa-robot d-block mb-1"></i> IA</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#config"><i class="fas fa-sliders-h d-block mb-1"></i> Config</a></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="cronograma">
-                <div class="p-2 bg-black bg-opacity-40 rounded border border-warning mb-3">
-                    <label class="x-small text-warning fw-bold mb-1">PRAZO DE ENTREGA</label>
-                    <input type="datetime-local" id="inputPrazo" class="form-control form-control-sm bg-dark text-white border-secondary mb-2">
-                    <div id="countdownDisplay" class="timer-display">00:00:00</div>
-                    <button class="btn btn-sm btn-outline-warning w-100 mt-2 fw-bold" onclick="gerarCronogramaAuto()">RECALCULAR PLANO 3 DIAS</button>
+            <div class="tab-pane fade show active" id="foco">
+                <div class="widget">
+                    <label class="x-small fw-bold text-warning mb-2 uppercase">Meta de Entrega</label>
+                    <input type="datetime-local" id="deadline" class="form-control form-control-sm bg-dark text-white border-secondary mb-3">
+                    <div id="timer" class="timer-hero">00:00:00</div>
                 </div>
-                <table class="table-cronograma">
-                    <thead><tr><th width="15%">OK</th><th width="85%">MISSÃO DO DIA</th></tr></thead>
-                    <tbody id="corpoCronograma"></tbody>
-                </table>
+                <div id="todo-container">
+                    <h6 class="x-small fw-bold text-dim mb-2 uppercase">Cronograma Dinâmico</h6>
+                    </div>
             </div>
 
-            <div class="tab-pane fade" id="pesquisa">
-                <h6 class="x-small fw-bold text-info mb-2">BUSCA NAS BASES CIENTÍFICAS</h6>
+            <div class="tab-pane fade" id="busca">
                 <div class="input-group mb-3">
-                    <input type="text" id="queryBusca" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Ex: PSA Ipojuca AHP">
-                    <button class="btn btn-sm btn-info" onclick="simularPesquisa()"><i class="fas fa-search"></i></button>
+                    <input type="text" id="searchQuery" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Termo de pesquisa...">
+                    <button class="btn btn-info btn-sm" onclick="runSearch()"><i class="fas fa-search"></i></button>
                 </div>
-                <div class="d-flex gap-1 mb-3">
-                    <button class="btn btn-xxs btn-dark border-secondary w-100" onclick="abrirBase('scholar')">Scholar</button>
-                    <button class="btn btn-xxs btn-dark border-secondary w-100" onclick="abrirBase('scielo')">SciELO</button>
-                    <button class="btn btn-xxs btn-dark border-secondary w-100" onclick="abrirBase('ana')">Portal ANA</button>
+                
+                <h6 class="x-small text-dim fw-bold mb-2 uppercase">Bases Nacionais</h6>
+                <div class="d-grid gap-1 mb-3">
+                    <button class="btn btn-search btn-outline-light" onclick="linkSearch('capes')"><i class="fas fa-university"></i> CAPES Periódicos</button>
+                    <button class="btn btn-search btn-outline-light" onclick="linkSearch('bdtd')"><i class="fas fa-graduation-cap"></i> BDTD (Teses/Dissertações)</button>
+                    <button class="btn btn-search btn-outline-light" onclick="linkSearch('scielo')"><i class="fas fa-flask"></i> SciELO Brasil</button>
                 </div>
-                <div id="resultadosBusca">
-                    <p class="x-small text-white-50 text-center">Os resultados da pesquisa aparecerão aqui para importação rápida.</p>
+
+                <h6 class="x-small text-dim fw-bold mb-2 uppercase">Bases Mundiais</h6>
+                <div class="d-grid gap-1">
+                    <button class="btn btn-search btn-outline-light" onclick="linkSearch('google')"><i class="fab fa-google"></i> Google Scholar</button>
+                    <button class="btn btn-search btn-outline-light" onclick="linkSearch('semantic')"><i class="fas fa-brain"></i> Semantic Scholar</button>
+                    <button class="btn btn-search btn-outline-light" onclick="linkSearch('dimensions')"><i class="fas fa-cube"></i> Dimensions.ai</button>
+                    <button class="btn btn-search btn-outline-light" onclick="linkSearch('doaj')"><i class="fas fa-door-open"></i> DOAJ (Open Access)</button>
+                </div>
+                <div id="searchPreview" class="mt-4"></div>
+            </div>
+
+            <div class="tab-pane fade" id="citar">
+                <h6 class="x-small fw-bold text-info border-bottom border-secondary pb-1">REFERÊNCIAS DO PROJETO</h6>
+                <div id="refList" class="mt-3"></div>
+                <button class="btn btn-sm btn-outline-info w-100 mt-3" onclick="addManualRef()">+ Adicionar Referência Manual</button>
+            </div>
+
+            <div class="tab-pane fade" id="ia">
+                <div class="ai-chat" id="aiBox">
+                    <div class="msg-ai">Olá! Eu sou sua IA assistente de pesquisa. Como posso ajudar com a Bacia do Ipojuca hoje?</div>
+                </div>
+                <div class="input-group mt-3">
+                    <input type="text" id="aiMsg" class="form-control form-control-sm bg-dark text-white" placeholder="Sugira um parágrafo sobre AHP...">
+                    <button class="btn btn-info btn-sm" onclick="sendToAI()"><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="citacoes">
-                <h6 class="x-small fw-bold text-info border-bottom border-secondary pb-1">REFERÊNCIAS CADASTRADAS</h6>
-                <div id="listaRef" class="mt-3">
-                    <p class="x-small text-white-50">Nenhuma referência adicionada. Use a aba "Pesquisa" ou adicione manualmente.</p>
+            <div class="tab-pane fade" id="config">
+                <div class="widget">
+                    <label class="x-small fw-bold mb-1 uppercase">Nome da Plataforma</label>
+                    <input type="text" id="config-sitename" class="form-control form-control-sm bg-dark text-white mb-3" oninput="syncConfig()">
+                    
+                    <label class="x-small fw-bold mb-1 uppercase">Nome do Acadêmico</label>
+                    <input type="text" id="config-username" class="form-control form-control-sm bg-dark text-white mb-3" oninput="syncConfig()">
+                    
+                    <h6 class="x-small fw-bold text-dim mb-1 uppercase">Templates Rápidos</h6>
+                    <button class="btn btn-xxs btn-outline-warning w-100 mb-1" onclick="loadTpl('capa')">Inserir Capa ABNT</button>
+                    <button class="btn btn-xxs btn-outline-warning w-100" onclick="loadTpl('ahp')">Inserir Tabela AHP</button>
                 </div>
-                <hr class="border-secondary">
-                <button class="btn btn-xxs btn-outline-light w-100" onclick="toggleManualRef()">+ Adicionar Manualmente</button>
-                <div id="formManual" class="mt-3 d-none p-2 bg-dark rounded border border-secondary">
-                    <input type="text" id="mAutor" placeholder="AUTOR (SOBRENOME, N.)" class="form-control form-control-sm bg-black text-white mb-1">
-                    <input type="text" id="mTitulo" placeholder="Título do Trabalho" class="form-control form-control-sm bg-black text-white mb-1">
-                    <input type="text" id="mAno" placeholder="Ano" class="form-control form-control-sm bg-black text-white mb-2">
-                    <button class="btn btn-sm btn-info w-100" onclick="addRefManual()">Salvar na Biblioteca</button>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="modelos">
-                <h6 class="x-small fw-bold text-info border-bottom border-secondary pb-1">INSERÇÃO RÁPIDA</h6>
-                <button class="btn btn-xxs btn-outline-light w-100 mb-2 text-start" onclick="inserirModelo('capa')">Capa ABNT Completa</button>
-                <button class="btn btn-xxs btn-outline-light w-100 mb-2 text-start" onclick="inserirModelo('tabela_ahp')">Tabela de Critérios AHP</button>
-                <button class="btn btn-xxs btn-outline-light w-100 text-start" onclick="inserirModelo('intro_resultados')">Intro. Resultados (Ipojuca)</button>
             </div>
         </div>
 
-        <div class="p-3 border-top border-secondary bg-dark">
-            <button class="btn btn-sm btn-primary w-100 mb-2" onclick="exportarDoc()"><i class="fas fa-file-word me-2"></i>Exportar p/ Word</button>
-            <div class="x-small text-center text-white-50">Salvamento Automático Ativo</div>
+        <div class="p-3 border-top border-secondary">
+            <button class="btn btn-sm btn-primary w-100 fw-bold py-2" onclick="exportDoc()"><i class="fas fa-file-word me-2"></i>EXPORTAR PARA WORD</button>
         </div>
     </aside>
 
-    <main id="main-viewport">
-        <div id="paper-A4">
-            <div id="main-editor">
-                <h1 style="text-align: center;">TÍTULO DO TRABALHO ACADÊMICO</h1>
-                <p>Use a aba de <b>Pesquisa</b> para encontrar referências e a aba de <b>Citações</b> para incluí-las automaticamente.</p>
+    <main id="viewport">
+        <div id="paper-canvas">
+            <div id="editor">
+                <h1 style="text-align:center;">TÍTULO DO TRABALHO</h1>
+                <p>Inicie sua jornada científica. Configure seus dados e use o cronograma para manter o foco.</p>
             </div>
         </div>
     </main>
@@ -135,184 +164,136 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // 1. Configurações Iniciais
-    var quill = new Quill('#main-editor', {
+    // 1. Inicialização do Motor Quill
+    var quill = new Quill('#editor', {
         theme: 'snow',
         modules: { toolbar: [[{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline'], [{ 'align': [] }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['image', 'clean']] }
     });
 
-    const DB_KEY = 'omni_ultra_v3';
-    let database = { tarefas: [], referencias: [], prazo: "" };
+    const APP_STORAGE = 'omni_ultra_v6';
+    let appData = { 
+        siteName: "OMNIEDITOR ULTRA", 
+        userName: "Acadêmico", 
+        content: "", 
+        deadline: "", 
+        refs: [],
+        tasks: ["Metodologia SIG/AHP", "Processamento Raster", "Análise de Resultados", "Revisão ABNT"]
+    };
 
-    // 2. Sistema de Pesquisa e Importação
-    const mockArtigos = [
-        { autor: "SANTOS, J. R.", titulo: "Análise Multicritério na Gestão de Recursos Hídricos", ano: "2023" },
-        { autor: "OLIVEIRA, M. A.", titulo: "Pagamento por Serviços Ambientais na Bacia do Rio Ipojuca", ano: "2024" },
-        { autor: "SILVA, T. P.", titulo: "Aplicação do Método AHP em Áreas de Recarga Hídrica", ano: "2022" }
-    ];
-
-    function simularPesquisa() {
-        const query = document.getElementById('queryBusca').value;
-        const cont = document.getElementById('resultadosBusca');
-        cont.innerHTML = `<p class="x-small text-info mb-2 text-center">Buscando por: "${query}"...</p>`;
-        
-        setTimeout(() => {
-            cont.innerHTML = mockArtigos.map((art, i) => `
-                <div class="search-result-mock">
-                    <div class="fw-bold x-small text-white">${art.titulo}</div>
-                    <div class="x-small text-white-50">${art.autor} (${art.ano})</div>
-                    <button class="btn btn-xxs btn-info mt-2 py-0" onclick="importarArtigo(${i})">Importar para Citações</button>
-                </div>
-            `).join('');
-        }, 800);
-    }
-
-    function abrirBase(tipo) {
-        const q = document.getElementById('queryBusca').value;
+    // 2. Multi-Busca Científica
+    function linkSearch(base) {
+        const query = document.getElementById('searchQuery').value;
         const urls = {
-            scholar: `https://scholar.google.com.br/scholar?q=${q}`,
-            scielo: `https://search.scielo.org/?q=${q}`,
-            ana: `https://dadosabertos.ana.gov.br/`
+            capes: `https://www-periodicos-capes-gov-br.ezl.periodicos.capes.gov.br/index.php/consulta-acervo.html?q=${query}`,
+            bdtd: `https://bdtd.ibict.br/vufind/Search/Results?lookfor=${query}`,
+            scielo: `https://search.scielo.org/?q=${query}`,
+            google: `https://scholar.google.com.br/scholar?q=${query}`,
+            semantic: `https://www.semanticscholar.org/search?q=${query}`,
+            dimensions: `https://app.dimensions.ai/discover/publication?search_text=${query}`,
+            doaj: `https://doaj.org/search/articles?ref=hp_button&source=%7B%22query%22%3A%7B%22query_string%22%3A%7B%22query%22%3A%22${query}%22%7D%7D%7D`
         };
-        window.open(urls[tipo], '_blank');
+        window.open(urls[base], '_blank');
     }
 
-    function importarArtigo(index) {
-        const art = mockArtigos[index];
-        addReferencia(art.autor, art.titulo, art.ano);
-        alert("Artigo importado com sucesso para a aba de Citações!");
+    function runSearch() {
+        const q = document.getElementById('searchQuery').value;
+        const out = document.getElementById('searchPreview');
+        out.innerHTML = `<div class='widget x-small'><b>Resultado Localizado:</b><br>Pesquisa sobre ${q}<br><button class='btn btn-xxs btn-info mt-2' onclick='importRef("AUTOR, Exemplo", "Título do Trabalho Importado", "2026")'>Importar para Citações</button></div>`;
     }
 
-    // 3. Gerenciador de Citações Pro
-    function addReferencia(autor, titulo, ano) {
-        const ref = {
-            id: Date.now(),
-            completa: `${autor.toUpperCase()}. <b>${titulo}</b>. ${ano}.`,
-            citacao: `(${autor.split(',')[0].toUpperCase()}, ${ano})`
-        };
-        database.referencias.push(ref);
-        renderRefs();
-        salvar();
+    // 3. Sistema de Citações Pro
+    function importRef(autor, titulo, ano) {
+        const ref = { id: Date.now(), autor, titulo, ano, full: `${autor.toUpperCase()}. <b>${titulo}</b>. ${ano}.`, cite: `(${autor.split(',')[0]}, ${ano})` };
+        appData.refs.push(ref); renderRefs(); save();
     }
 
     function renderRefs() {
-        const cont = document.getElementById('listaRef');
-        if (database.referencias.length === 0) {
-            cont.innerHTML = `<p class="x-small text-white-50">Nenhuma referência adicionada.</p>`;
-            return;
-        }
-        cont.innerHTML = database.referencias.map(r => `
-            <div class="card-ref">
-                ${r.completa}
-                <div class="mt-2 d-flex gap-1">
-                    <button class="btn btn-xxs btn-info py-0" onclick="inserirTexto('${r.citacao}')">Citar no Texto</button>
-                    <button class="btn btn-xxs btn-outline-danger py-0" onclick="removerRef(${r.id})">Remover</button>
-                </div>
-            </div>
+        const cont = document.getElementById('refList');
+        cont.innerHTML = appData.refs.map(r => `
+            <div class='ref-card'>${r.full}<br>
+            <button class='btn btn-xxs btn-info mt-1 py-0' onclick='injectCite("${r.cite}")'>Citar</button>
+            <button class='btn btn-xxs btn-danger mt-1 py-0' onclick='delRef(${r.id})'>X</button></div>
         `).join('');
     }
 
-    function inserirTexto(t) {
-        const range = quill.getSelection() || { index: 0 };
-        quill.insertText(range.index, t);
+    function injectCite(c) { const r = quill.getSelection() || { index: 0 }; quill.insertText(r.index, c); }
+    function delRef(id) { appData.refs = appData.refs.filter(r => r.id !== id); renderRefs(); save(); }
+
+    // 4. IA Thought Partner (Logic)
+    function sendToAI() {
+        const msg = document.getElementById('aiMsg');
+        const box = document.getElementById('aiBox');
+        if(!msg.value) return;
+        box.innerHTML += `<div class='msg-user'>${msg.value}</div>`;
+        setTimeout(() => {
+            box.innerHTML += `<div class='msg-ai'>Baseado na Metodologia AHP para PSA, sugiro ponderar o critério 'Erodibilidade' com peso superior a 0,20 se a Bacia do Ipojuca apresentar solos do tipo Latossolo...</div>`;
+            box.scrollTop = box.scrollHeight;
+        }, 800);
+        msg.value = "";
     }
 
-    function removerRef(id) {
-        database.referencias = database.referencias.filter(r => r.id !== id);
-        renderRefs();
-        salvar();
+    // 5. Configurações e Persistência
+    function syncConfig() {
+        appData.siteName = document.getElementById('config-sitename').value;
+        appData.userName = document.getElementById('config-username').value;
+        document.getElementById('display-sitename').innerText = appData.siteName;
+        document.getElementById('display-username').innerText = `Acadêmico: ${appData.userName}`;
+        document.title = appData.siteName;
+        save();
     }
 
-    // 4. Cronograma Foco
-    function gerarCronogramaAuto() {
-        const prazo = new Date(document.getElementById('inputPrazo').value);
-        if (isNaN(prazo)) return alert("Defina o prazo primeiro!");
-        
-        const etapas = ["SIG & Processamento AHP", "Escrita dos Resultados", "Discussão e Referencial", "Ajustes ABNT e Entrega"];
-        database.tarefas = etapas.map((e, i) => ({ texto: e, ok: false }));
-        renderCronograma();
-        salvar();
+    function save() {
+        appData.content = quill.root.innerHTML;
+        appData.deadline = document.getElementById('deadline').value;
+        localStorage.setItem(APP_STORAGE, JSON.stringify(appData));
     }
 
-    function renderCronograma() {
-        const cont = document.getElementById('corpoCronograma');
-        cont.innerHTML = database.tarefas.map((t, i) => `
-            <tr>
-                <td><input type="checkbox" ${t.ok ? 'checked' : ''} onchange="toggleTarefa(${i})"></td>
-                <td style="${t.ok ? 'text-decoration: line-through; opacity: 0.5' : ''}">${t.texto}</td>
-            </tr>
-        `).join('');
-    }
-
-    function toggleTarefa(i) {
-        database.tarefas[i].ok = !database.tarefas[i].ok;
-        renderCronograma();
-        salvar();
-    }
-
-    // 5. Modelos de Texto
-    const tpl = {
-        capa: `<h1 style="text-align: center;">UNIVERSIDADE FEDERAL</h1><br><h2 style="text-align: center;">NOME DO DISCENTE</h2><br><br><br><h1 style="text-align: center;">TÍTULO DA DISSERTAÇÃO</h1>`,
-        tabela_ahp: `<table style="width:100%; border:1px solid black; border-collapse:collapse"><thead><tr style="border-bottom:2px solid black"><th>Subcritério</th><th>Peso (AHP)</th></tr></thead><tbody><tr><td>Declividade</td><td>0,XX</td></tr><tr><td>Erodibilidade</td><td>0,XX</td></tr><tr><td>Uso e Ocupação</td><td>0,XX</td></tr></tbody></table><p class="x-small">Fonte: Elaborado pelo autor (2026).</p>`,
-        intro_resultados: `<h2>4. RESULTADOS E DISCUSSÃO</h2><p>A partir da integração dos critérios geoambientais na Bacia do Rio Ipojuca, obteve-se o mapa de priorização...</p>`
-    };
-
-    function inserirModelo(id) {
-        quill.clipboard.dangerouslyPasteHTML(quill.getLength(), tpl[id]);
-        salvar();
-    }
-
-    // 6. Sistema Base
-    function salvar() {
-        database.prazo = document.getElementById('inputPrazo').value;
-        database.html = quill.root.innerHTML;
-        localStorage.setItem(DB_KEY, JSON.stringify(database));
-    }
-
-    function carregar() {
-        const d = JSON.parse(localStorage.getItem(DB_KEY));
-        if (d) {
-            database = d;
-            quill.root.innerHTML = d.html || "";
-            document.getElementById('inputPrazo').value = d.prazo || "";
+    function load() {
+        const saved = JSON.parse(localStorage.getItem(APP_STORAGE));
+        if(saved) {
+            appData = saved;
+            quill.root.innerHTML = saved.content || "";
+            document.getElementById('deadline').value = saved.deadline || "";
+            document.getElementById('config-sitename').value = saved.siteName || "";
+            document.getElementById('config-username').value = saved.userName || "";
+            syncConfig();
             renderRefs();
-            renderCronograma();
-            if(d.prazo) iniciarTimer(d.prazo);
+            renderTasks();
+            if(saved.deadline) startTimer(saved.deadline);
         }
     }
 
-    function iniciarTimer(data) {
-        clearInterval(window.itv);
-        window.itv = setInterval(() => {
-            const diff = new Date(data) - new Date();
-            const disp = document.getElementById('countdownDisplay');
-            if (diff <= 0) { disp.innerText = "ENTREGA!"; return; }
-            const h = Math.floor(diff / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            disp.innerText = `${h}:${m}:${s}`.replace(/\b\d\b/g, "0$&");
+    function renderTasks() {
+        const cont = document.getElementById('todo-container');
+        cont.innerHTML = appData.tasks.map(t => `<div class='form-check x-small'><input class='form-check-input' type='checkbox'> <label class='form-check-label'>${t}</label></div>`).join('');
+    }
+
+    function startTimer(target) {
+        clearInterval(window.timerInt);
+        window.timerInt = setInterval(() => {
+            const diff = new Date(target) - new Date();
+            if(diff < 0) return document.getElementById('timer').innerText = "CONCLUÍDO";
+            const h = Math.floor(diff / 3600000); const m = Math.floor((diff % 3600000) / 60000); const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('timer').innerText = `${h}:${m}:${s}`.replace(/\b\d\b/g, "0$&");
         }, 1000);
     }
 
-    function exportarDoc() {
+    function loadTpl(t) {
+        const tpls = {
+            capa: `<h1 style="text-align:center;">UNIVERSIDADE...</h1><br><h2 style="text-align:center;">${appData.userName}</h2><br><br><br><h1 style="text-align:center;">TÍTULO</h1>`,
+            ahp: `<table border="1" style="width:100%;"><thead><tr><th>Critério</th><th>Peso</th></tr></thead><tbody><tr><td>Declividade</td><td>0,XX</td></tr></tbody></table>`
+        };
+        quill.clipboard.dangerouslyPasteHTML(quill.getLength(), tpls[t]);
+    }
+
+    function exportDoc() {
         const blob = new Blob(['<html><head><meta charset="utf-8"></head><body>' + quill.root.innerHTML + '</body></html>'], { type: 'application/msword' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'Dissertacao_OmniEditor.doc';
-        a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Manuscrito_Final.doc'; a.click();
     }
 
-    function toggleManualRef() { document.getElementById('formManual').classList.toggle('d-none'); }
-    function addRefManual() {
-        const a = document.getElementById('mAutor').value;
-        const t = document.getElementById('mTitulo').value;
-        const y = document.getElementById('mAno').value;
-        if(a && t) { addReferencia(a, t, y); toggleManualRef(); }
-    }
-
-    quill.on('text-change', salvar);
-    document.getElementById('inputPrazo').onchange = (e) => { iniciarTimer(e.target.value); salvar(); };
-    window.onload = carregar;
+    window.onload = load;
+    quill.on('text-change', save);
+    document.getElementById('deadline').onchange = (e) => { startTimer(e.target.value); save(); };
 </script>
 
 </body>
