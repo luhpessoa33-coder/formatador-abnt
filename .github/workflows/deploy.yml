@@ -1,0 +1,13 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: ["main"]
+
+# Adicione estas linhas abaixo:
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+# ... resto do seu código
