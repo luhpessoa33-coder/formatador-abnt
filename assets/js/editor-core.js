@@ -1,62 +1,99 @@
-let quill;
-const MAX_PAGES = 300;
-const WORDS_PER_PAGE = 275;
+// Configuração de Templates
+const TEMPLATES = {
+    ifpe: { font: 'Arial', size: '12pt', line: '1.5', margins: [3, 3, 2, 2] },
+    abnt_generico: { font: 'Times New Roman', size: '12pt', line: '1.5', margins: [3, 3, 2, 2] },
+    apa: { font: 'Times New Roman', size: '12pt', line: '2.0', margins: [2.5, 2.5, 2.5, 2.5] }
+};
 
+let editor;
+
+// Inicialização
 document.addEventListener('DOMContentLoaded', () => {
-    quill = new Quill('#main-editor', {
-        modules: { toolbar: [['bold', 'italic'], [{ 'header': 1 }, { 'header': 2 }], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['image', 'clean']] },
-        theme: 'snow'
-    });
-
-    const saved = localStorage.getItem('ACADEMIC_V3_SAVE');
-    if (saved) quill.setContents(JSON.parse(saved));
-
-    quill.on('text-change', () => {
-        const words = quill.getText().trim().split(/\s+/).length;
-        const pages = Math.ceil(words / WORDS_PER_PAGE);
-        document.getElementById('pageCounter').innerText = `${words} palavras (~${pages} pág)`;
-
-        if (pages > MAX_PAGES) {
-            document.getElementById('paper-A4').classList.add('over-limit');
-        } else {
-            document.getElementById('paper-A4').classList.remove('over-limit');
-            localStorage.setItem('ACADEMIC_V3_SAVE', JSON.stringify(quill.getContents()));
-            updateStatus();
+    editor = new Quill('#main-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['image', 'link'],
+                ['clean']
+            ]
         }
     });
 
-    document.getElementById('fileInput').addEventListener('change', e => {
-        const reader = new FileReader();
-        reader.onload = evt => {
-            mammoth.convertToHtml({arrayBuffer: evt.target.result})
-                .then(res => quill.clipboard.dangerouslyPasteHTML(0, res.value));
-        };
-        reader.readAsArrayBuffer(e.target.files[0]);
-    });
+    carregarEstado();
+    setInterval(autosave, 2000);
 });
 
-function confirmarLimpezaTotal() {
-    if (confirm("⚠️ AVISO: Isto apagará todos os rascunhos salvos neste navegador. Continuar?")) {
-        localStorage.removeItem('ACADEMIC_V3_SAVE');
-        alert("✅ Dados removidos.");
-        window.location.reload();
+// Importação com Formatação Automática
+async function processarImportacaoPrincipal() {
+    const file = document.getElementById('fileInput').files[0];
+    if(!file) return Swal.fire('Erro', 'Selecione o arquivo .docx', 'error');
+
+    Swal.showLoading();
+    
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        const result = await mammoth.convertToHtml({ arrayBuffer: e.target.result });
+        
+        // Injeta o conteúdo
+        editor.root.innerHTML = result.value;
+        
+        // IA: Aplica Formatação Automática baseada no Template
+        aplicarTemplate();
+        
+        Swal.fire('Sucesso', 'Conteúdo importado e formatado via IA Acadêmica.', 'success');
+        irParaEditor();
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+function aplicarTemplate() {
+    const tName = document.getElementById('masterTemplate').value;
+    const config = TEMPLATES[tName];
+    
+    const paper = document.getElementById('paper-A4');
+    paper.style.paddingTop = config.margins[0] + "cm";
+    paper.style.paddingLeft = config.margins[1] + "cm";
+    paper.style.paddingRight = config.margins[2] + "cm";
+    paper.style.paddingBottom = config.margins[3] + "cm";
+    
+    editor.root.style.fontFamily = config.font;
+    editor.root.style.fontSize = config.size;
+    editor.root.style.lineHeight = config.line;
+    
+    verificarLimitePaginas();
+}
+
+function verificarLimitePaginas() {
+    const height = editor.root.scrollHeight;
+    const pageHeightPx = 1122; // Aprox pixels para 29.7cm a 96dpi
+    const numPages = Math.ceil(height / pageHeightPx);
+    
+    const monitor = document.getElementById('pageMonitor');
+    monitor.innerText = `Páginas: ${numPages} / 300`;
+    
+    if(numPages > 300) {
+        monitor.className = "badge bg-danger animate__animated animate__shakeX";
+        Swal.fire('Limite Atingido', 'O trabalho excedeu 300 páginas!', 'warning');
+    } else {
+        monitor.className = "badge bg-success";
     }
 }
 
-async function baixarDocxFinal() {
-    const html = quill.root.innerHTML;
-    const blob = await window.htmlToDocx(html, null, { margins: { top: 1700, bottom: 1133, left: 1700, right: 1133 } });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'Manuscrito_AcademicHub_Pro.docx';
-    link.click();
+function autosave() {
+    localStorage.setItem('ipojuca_master_v3', editor.root.innerHTML);
+    document.getElementById('statusSalvo').innerHTML = `<i class="fas fa-check"></i> Sincronizado: ${new Date().toLocaleTimeString()}`;
+    verificarLimitePaginas();
 }
 
-function updateStatus() {
-    const s = document.getElementById('statusSalvo');
-    s.innerHTML = '<i class="fas fa-sync fa-spin"></i> Sincronizando...';
-    setTimeout(() => s.innerHTML = '<i class="fas fa-check-circle"></i> Sincronizado', 1000);
+function carregarEstado() {
+    const salvo = localStorage.getItem('ipojuca_master_v3');
+    if(salvo) editor.root.innerHTML = salvo;
 }
 
-function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
-function ativarEditor() { new bootstrap.Tab(document.querySelector('[data-bs-target="#tab-editor"]')).show(); }
+function irParaEditor() {
+    const tab = new bootstrap.Tab(document.querySelector('[data-bs-target="#tab-editor"]'));
+    tab.show();
+}
