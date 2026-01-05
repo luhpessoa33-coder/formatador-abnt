@@ -1,9 +1,35 @@
 body { transition: background 0.3s; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 body.dark-mode { background-color: #0f1113 !important; }
-#editor-viewport { height: 80vh; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 30px; background: #525659; }
-#paper-A4 { background: white; width: 21cm; min-height: 29.7cm; box-shadow: 0 0 50px rgba(0,0,0,0.6); margin-bottom: 60px; }
-.ql-editor { padding: 3cm 2cm 2cm 3cm !important; font-family: 'Times New Roman', serif; font-size: 12pt; line-height: 1.5; text-align: justify; color: #000; }
-#paper-A4.over-limit { border: 8px solid #dc3545 !important; }
-.nav-tabs .nav-link { border: none; font-weight: bold; opacity: 0.6; color: white; }
+
+#editor-viewport {
+    height: 78vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    background: #525659;
+}
+
+#paper-A4 {
+    background: white;
+    width: 21cm;
+    min-height: 29.7cm;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+    margin-bottom: 60px;
+}
+
+/* Margens Estritas ABNT */
+.ql-editor {
+    padding: 3cm 2cm 2cm 3cm !important; /* Esq/Sup 3cm, Dir/Inf 2cm */
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    text-align: justify;
+    color: #000;
+}
+
+.nav-tabs .nav-link { border: none; font-weight: bold; opacity: 0.6; color: white; transition: 0.3s; }
 .nav-tabs .nav-link.active { border-bottom: 4px solid #0d6efd !important; opacity: 1; background: transparent !important; }
+#paper-A4.over-limit { border: 8px solid #dc3545 !important; }
 .btn-xxs { padding: 1px 5px; font-size: 0.65rem; }
