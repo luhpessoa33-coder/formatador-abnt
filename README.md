@@ -1,4 +1,4 @@
-# 🎓 AcademicHub Pro 3.0 — IFPE - MPGA
+# 🎓 AcademicHub Pro 3.0 
 
 Workspace científico industrial para a Bacia do Rio Ipojuca.
 
