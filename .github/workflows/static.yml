@@ -1,14 +1,25 @@
-name: Deploy Automático V3.0
+# Workflow de Deploy Automático para o AcademicHub Pro V3.0
+name: Deploy do Formatador ABNT Industrial
+
 on:
+  # Dispara o deploy sempre que houver um "push" na branch principal
   push:
     branches: ["main"]
+
+  # Permite a execução manual através da aba "Actions" no GitHub
+  workflow_dispatch:
+
+# Configura as permissões necessárias para o GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
+
+# Garante que apenas um deploy ocorra por vez para evitar conflitos de versão
 concurrency:
   group: "pages"
   cancel-in-progress: true
+
 jobs:
   deploy:
     environment:
@@ -16,14 +27,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout do Código
         uses: actions/checkout@v4
-      - name: Setup Pages
+
+      - name: Configurar Ambiente GitHub Pages
         uses: actions/configure-pages@v4
-      - name: Upload Artifact
+
+      - name: Upload dos Arquivos (Raiz e Assets)
         uses: actions/upload-pages-artifact@v3
         with:
+          # Sobe todo o conteúdo do diretório formatador-abnt/
           path: '.'
-      - name: Deploy
+
+      - name: Publicar no GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
