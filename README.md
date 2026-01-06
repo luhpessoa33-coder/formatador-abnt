@@ -1,4 +1,4 @@
-# 🏛️ OmniEditor Diamond Sovereign v26.0
+# 🏛️ Formatador ABNT
 ### *Absolute Engineering Suite for Academic Research*
 
 O **OmniEditor Diamond Sovereign** é um ecossistema de produção científica de alta performance, desenvolvido especificamente para atender ao rigor exigido no **Instituto Federal de Pernambuco (IFPE)** e nas normas da **ABNT**. 
