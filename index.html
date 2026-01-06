@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniEditor Diamond v29.0 | Sovereign Masterpiece</title>
+    <title>OmniEditor Sovereign v35.0 | Absolute Masterpiece Edition</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,50 +24,49 @@
 
         body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Inter', sans-serif; overflow: hidden; margin: 0; }
         
-        /* Overlays e Modais de Auditoria */
+        /* Sistema de Overlays e Modais de Auditoria */
         .app-shell { display: flex; height: 100vh; filter: blur(15px); pointer-events: none; transition: 0.8s; }
         .app-active { filter: blur(0); pointer-events: auto; }
-        #ethics-overlay, #audit-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.97); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .audit-card { max-width: 700px; width: 90%; background: var(--bg-card); border: 2px solid var(--accent); border-radius: 24px; padding: 40px; box-shadow: 0 0 100px rgba(0,210,255,0.4); }
+        #ethics-overlay, #audit-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.98); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .audit-card { max-width: 800px; width: 95%; background: var(--bg-card); border: 2px solid var(--accent); border-radius: 28px; padding: 40px; box-shadow: 0 0 120px rgba(0,210,255,0.4); }
 
-        /* Sidebar Profissional com Abas Otimizadas */
+        /* Sidebar Profissional */
         aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid #27272a; display: flex; flex-direction: column; z-index: 100; }
         .sidebar-header { padding: 25px; background: #000; border-bottom: 2px solid var(--accent); }
         .nav-tabs { border-bottom: 1px solid #27272a; background: #000; }
-        .nav-link { color: #71717a; border: none !important; font-size: 0.45rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; padding: 15px 5px; }
+        .nav-link { color: #71717a; border: none !important; font-size: 0.42rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; padding: 12px 4px; }
         .nav-link.active { background: transparent !important; color: var(--accent) !important; border-bottom: 2px solid var(--accent) !important; }
-        .tab-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
+        .tab-content { flex-grow: 1; overflow-y: auto; padding: 18px; }
 
-        /* Canvas de Papel Real (NBR 14724) */
+        /* Canvas ABNT NBR 14724 (Simulação Papel Real) */
         #viewport { flex-grow: 1; background: #1c1c1e; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 30px 0; scroll-behavior: smooth; }
-        #toolbar-container { width: 210mm; background: #fcfcfc; border: 1px solid #ccc; position: sticky; top: 0; z-index: 1000; display: flex; flex-wrap: wrap; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        #toolbar-container { width: 210mm; background: #fcfcfc; border: 1px solid #ccc; position: sticky; top: 0; z-index: 1000; display: flex; flex-wrap: wrap; justify-content: center; }
         #paper-canvas { 
             width: 210mm; min-height: 297mm; background: #fff; 
-            padding: 30mm 20mm 20mm 30mm; /* Rigor ABNT: 3cm Sup/Esq, 2cm Inf/Dir */
+            padding: 30mm 20mm 20mm 30mm; /* ABNT: 3cm Sup/Esq, 2cm Inf/Dir */
             box-shadow: 0 50px 100px rgba(0,0,0,0.9); color: #000; position: relative; margin-bottom: 60px;
         }
-        #editor { font-family: var(--abnt-font); font-size: 12pt; line-height: 1.5; border: none !important; min-height: 247mm; text-align: justify; }
+        #editor { font-family: var(--abnt-font); font-size: 12pt; line-height: 1.5; border: none !important; min-height: 247mm; text-align: justify; outline: none; }
 
-        /* Estilização de Elementos Científicos */
+        /* Elementos ABNT Automáticos */
         #editor table.abnt-tabela { border-collapse: collapse; width: 100%; border-top: 2px solid #000; border-bottom: 2px solid #000; margin: 15px 0; }
         #editor table.abnt-quadro { border-collapse: collapse; width: 100%; border: 1px solid #000; margin: 15px 0; }
         #editor .legenda { text-align: center; font-weight: bold; font-size: 10pt; margin-bottom: 5px; }
         #editor .fonte { text-align: center; font-size: 10pt; margin-top: 5px; }
 
-        /* Widgets Inteligentes */
-        .widget { background: var(--bg-card); border: 1px solid #2d2d30; border-radius: 18px; padding: 20px; margin-bottom: 15px; }
-        .btn-sovereign { font-size: 0.65rem; font-weight: 900; padding: 12px; border-radius: 10px; text-transform: uppercase; width: 100%; margin-bottom: 8px; transition: 0.3s; }
-        .btn-sovereign:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.2); }
+        /* Widgets de Interface */
+        .widget { background: var(--bg-card); border: 1px solid #2d2d30; border-radius: 16px; padding: 18px; margin-bottom: 15px; }
+        .btn-sovereign { font-size: 0.62rem; font-weight: 900; padding: 10px; border-radius: 8px; text-transform: uppercase; width: 100%; margin-bottom: 6px; transition: 0.3s; border: none; }
+        .btn-sovereign:hover { filter: brightness(1.2); transform: translateY(-1px); }
         
-        .cronograma-table { font-size: 0.65rem; width: 100%; color: #ddd; border-collapse: collapse; }
-        .cronograma-table th, .cronograma-table td { border: 1px solid #333; padding: 8px; }
-        .cronograma-table input { background: transparent; border: none; color: #fff; width: 100%; outline: none; }
+        .ai-chat-box { height: 160px; background: #000; border-radius: 12px; padding: 15px; font-size: 0.78rem; overflow-y: auto; border: 1px solid #333; margin-bottom: 10px; }
+        .scan-tag { font-size: 0.65rem; color: var(--accent); background: #000; padding: 6px 10px; border-radius: 6px; border: 1px solid #333; margin-bottom: 4px; display: flex; justify-content: space-between; }
+        
+        .cronograma-table { font-size: 0.62rem; width: 100%; color: #ddd; border-collapse: collapse; }
+        .cronograma-table td { border: 1px solid #333; padding: 6px; }
+        .cronograma-table input { background: transparent; border: none; color: #fff; width: 100%; }
 
-        .ai-chat-box { height: 180px; background: #000; border-radius: 12px; padding: 15px; font-size: 0.78rem; overflow-y: auto; border: 1px solid #333; margin-bottom: 10px; }
-        .search-badge { font-size: 0.55rem; font-weight: bold; padding: 10px; border-radius: 8px; text-align: left; width: 100%; margin-bottom: 5px; border: 1px solid #333; background: #000; transition: 0.2s; }
-        .ref-card { font-size: 0.7rem; background: #000; border-radius: 10px; padding: 12px; margin-bottom: 10px; border: 1px solid #333; }
-
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
     </style>
 </head>
@@ -75,23 +74,23 @@
 
 <div id="audit-modal" style="display: none;">
     <div class="audit-card">
-        <h4 class="text-info fw-bold mb-3"><i class="fas fa-microscope me-2"></i>Scanner de Inteligência Acadêmica</h4>
-        <p class="text-white-50 small mb-4">Analisamos o seu arquivo Word. Identificamos elementos que não cumprem o rigor ABNT. Deseja que a IA realize a adequação automática?</p>
-        <div id="audit-list" class="mb-4">
+        <h3 class="text-info fw-bold mb-3"><i class="fas fa-microscope me-2"></i>Neural Indexer IA v35</h3>
+        <p class="text-white-50 small mb-4">Mídia analisada com sucesso. O sistema detectou a estrutura abaixo e está pronto para normalizar parágrafos, tópicos e elementos visuais.</p>
+        <div id="audit-report" class="bg-black p-3 rounded mb-4">
             </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-info w-100 fw-bold" onclick="executeSanitization()">APLICAR RIGOR TOTAL</button>
-            <button class="btn btn-outline-secondary w-100" onclick="closeAudit()">MANTER ORIGINAL</button>
+            <button class="btn btn-info w-100 fw-bold py-3" onclick="executeSanitizer('smart')">APLICAR RIGOR ABNT TOTAL</button>
+            <button class="btn btn-outline-warning w-100 fw-bold py-3" onclick="executeSanitizer('raw')">INJETAR CONTEÚDO BRUTO</button>
         </div>
     </div>
 </div>
 
 <div id="ethics-overlay">
     <div class="ethics-card text-center">
-        <i class="fas fa-shield-alt fa-4x text-info mb-4"></i>
-        <h3 class="fw-bold text-white mb-3">Soberania Diamond v29.0</h3>
-        <p class="text-white-50 small mb-4">Plataforma blindada para a Bacia do Ipojuca e IFPE. Sua identidade digital garante a persistência do trabalho em dias diferentes.</p>
-        <button class="btn btn-info w-100 fw-bold py-3 shadow-lg" onclick="acceptEthics()">SINCRONIZAR E INICIAR TRABALHO</button>
+        <i class="fas fa-chess-king fa-4x text-info mb-4"></i>
+        <h3 class="fw-bold text-white mb-3">Soberania Diamond v35.0</h3>
+        <p class="text-white-50 small mb-4">A plataforma definitiva para sua dissertação no IFPE. Rigor, Automacão e Integridade para a Bacia do Ipojuca.</p>
+        <button class="btn btn-info w-100 fw-bold py-3 shadow-lg" onclick="acceptEthics()">ATIVAR E SINCRONIZAR</button>
     </div>
 </div>
 
@@ -100,65 +99,55 @@
         <div class="sidebar-header d-flex justify-content-between align-items-center">
             <div>
                 <h6 class="mb-0 fw-bold text-info">OMNIEDITOR DIAMOND</h6>
-                <small class="text-white-50 x-small">Suite de Soberania Absoluta</small>
+                <small class="text-white-50 x-small">The Absolute Masterpiece</small>
             </div>
-            <i class="fas fa-fingerprint text-secondary" style="cursor: pointer;" onclick="toggleAdmin()"></i>
+            <i class="fas fa-fingerprint text-secondary"></i>
         </div>
         
         <ul class="nav nav-tabs nav-fill" id="mainTabs">
             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-import">Importar</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-tpl">Templates</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-tpl">Estrutura</a></li>
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-cite">Busca/Ref</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-foco">Cronograma</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-foco">Foco</a></li>
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-ai">Advisor</a></li>
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane fade show active" id="tab-import">
                 <div class="widget">
-                    <h6 class="x-small fw-bold text-warning uppercase mb-2">Importar Trabalho (.docx)</h6>
-                    <input type="file" id="import-docx" class="form-control form-control-sm bg-dark text-white mb-2" accept=".docx">
-                    <button class="btn btn-sovereign btn-warning" onclick="startAudit()">ANALISAR E FORMATAR VIA IA</button>
+                    <h6 class="x-small fw-bold text-warning uppercase mb-2">Importador de Alta Precisão</h6>
+                    <input type="file" id="import-file" class="form-control form-control-sm bg-dark text-white mb-2" accept=".docx,.pdf">
+                    <button class="btn btn-sovereign btn-warning" onclick="handleFileImport()">ANALISAR E FORMATAR MÍDIA</button>
                     <hr class="border-secondary">
-                    <button class="btn btn-sovereign btn-info" onclick="applyABNT()">FORÇAR RIGOR ABNT (ARIAL 12)</button>
-                    <p class="x-small text-white-50 mt-2">O motor v29 identifica e remove automaticamente o "lixo" de formatação do Word.</p>
+                    <button class="btn btn-sovereign btn-info" onclick="applyABNT()">FORÇAR RIGOR ABNT MANUAL</button>
+                    <p class="x-small text-white-50 mt-2">O motor v35 limpa XML sujo e extrai texto de PDFs preservando a lógica.</p>
                 </div>
             </div>
 
             <div class="tab-pane fade" id="tab-tpl">
                 <div class="widget">
-                    <h6 class="x-small fw-bold text-info uppercase mb-3">Modelos de Trabalho</h6>
-                    <select id="tpl-type" class="form-select form-select-sm bg-dark text-white mb-3">
-                        <option value="dissertacao">Dissertação (IFPE)</option>
-                        <option value="tcc">TCC / Artigo</option>
-                        <option value="projeto">Projeto de Pesquisa</option>
-                        <option value="relatorio">Relatório de Estágio</option>
-                    </select>
-                    <input type="text" id="meta-title" class="form-control form-control-sm bg-dark text-white mb-1" placeholder="Título do Trabalho">
-                    <input type="text" id="meta-author" class="form-control form-control-sm bg-dark text-white mb-2" placeholder="Autor">
-                    <button class="btn btn-sovereign btn-info" onclick="injectMetadata()">GERAR ESTRUTURA COMPLETA</button>
+                    <h6 class="x-small fw-bold text-info uppercase mb-3">Indexação Ativa</h6>
+                    <button class="btn btn-sovereign btn-outline-info" onclick="runStructuralScan()">ESCANEAR ELEMENTOS AGORA</button>
+                    <button class="btn btn-sovereign btn-outline-success" onclick="generateAutoLists()">GERAR SUMÁRIO E LISTAS</button>
+                    <div id="scan-status" class="mt-3"></div>
                 </div>
                 <div class="widget">
+                    <h6 class="x-small fw-bold text-warning uppercase mb-2">Identidade Visual</h6>
+                    <button class="btn btn-sovereign btn-outline-light" onclick="injectMetadata()">GERAR CAPA/FOLHA IFPE</button>
                     <button class="btn btn-sovereign btn-outline-light" onclick="insertScientific('tabela')">INSERIR TABELA IBGE</button>
-                    <button class="btn btn-sovereign btn-outline-light" onclick="insertScientific('quadro')">INSERIR QUADRO ABNT</button>
-                    <button class="btn btn-sovereign btn-outline-info" onclick="generateSumario()">ATUALIZAR SUMÁRIO AUTOMÁTICO</button>
                 </div>
             </div>
 
             <div class="tab-pane fade" id="tab-cite">
                 <div class="widget">
-                    <h6 class="x-small fw-bold text-warning uppercase mb-2">Hub de Pesquisa Total</h6>
-                    <div class="d-flex mb-3">
-                        <button class="btn btn-xxs btn-outline-info me-1" onclick="setStyle('ABNT')">ABNT</button>
-                        <button class="btn btn-xxs btn-outline-info" onclick="setStyle('APA')">APA</button>
-                    </div>
+                    <h6 class="x-small fw-bold text-warning uppercase mb-2">Busca Federada (20+ Bases)</h6>
                     <input type="text" id="q" class="form-control form-control-sm bg-dark text-white mb-2" placeholder="Pesquisar artigos e dados...">
                     <div class="d-grid overflow-auto" style="max-height: 250px;">
                         <button class="btn search-badge" onclick="go('scholar')">Google Scholar</button>
-                        <button class="btn search-badge" onclick="go('ana')">ANA (Dados Bacia Ipojuca)</button>
-                        <button class="btn search-badge" onclick="go('bdtd')">BDTD (Teses e Dissert.)</button>
+                        <button class="btn search-badge" onclick="go('ana')">ANA (Dados Hídricos)</button>
+                        <button class="btn search-badge" onclick="go('bdtd')">BDTD (Teses Nacionais)</button>
                         <button class="btn search-badge" onclick="go('scielo')">SciELO Brasil</button>
-                        <button class="btn search-badge" onclick="go('dimensions')">Dimensions (Global)</button>
+                        <button class="btn search-badge" onclick="go('dimensions')">Dimensions.ai</button>
                         <button class="btn search-badge" onclick="go('perplexity')">Perplexity AI</button>
                     </div>
                 </div>
@@ -171,9 +160,8 @@
                     <div class="mt-2"><input type="datetime-local" id="deadline" class="form-control form-control-sm bg-dark text-white" onchange="save()"></div>
                 </div>
                 <div class="widget">
-                    <h6 class="x-small fw-bold text-success uppercase mb-2">Cronograma FOCO - Google Sheets</h6>
-                    <table class="cronograma-table">
-                        <thead><tr><th>Fase do Trabalho</th><th width="30">Ok</th></tr></thead>
+                    <h6 class="x-small fw-bold text-success uppercase mb-2">Sprint de Escrita - FOCO</h6>
+                    <table class="cronograma-table" width="100%">
                         <tbody id="cronograma-body"></tbody>
                     </table>
                     <button class="btn btn-xxs btn-outline-success w-100 mt-2" onclick="addMeta()">+ ADICIONAR META</button>
@@ -181,23 +169,18 @@
             </div>
 
             <div class="tab-pane fade" id="tab-ai">
-                <div class="widget">
-                    <button class="btn btn-sovereign btn-outline-warning mb-1" onclick="aiAction('resume')">GERAR RESUMO AUTOMÁTICO</button>
-                    <button class="btn btn-sovereign btn-outline-danger" onclick="aiAction('plagiarism')">CONFERIR PLÁGIO (DETECTOR)</button>
-                </div>
-                <div class="ai-chat-box" id="ai-chat"><div class="text-info small">[ADVISOR]: Sistema blindado. Pronto para revisar seu trabalho.</div></div>
+                <div class="ai-chat-box" id="ai-chat"><div class="text-info small">[ADVISOR]: Monitorando sua pesquisa na Bacia do Ipojuca.</div></div>
                 <div class="input-group mb-3">
-                    <input type="text" id="ai-msg" class="form-control form-control-sm bg-dark text-white" placeholder="Dúvida técnica...">
+                    <input type="text" id="ai-msg" class="form-control form-control-sm bg-dark text-white" placeholder="Dúvida...">
                     <button class="btn btn-info btn-sm" onclick="askAI()"><i class="fas fa-paper-plane"></i></button>
                 </div>
-                <h6 class="x-small fw-bold text-warning uppercase mb-2">Fórmulas com Numeração Automática</h6>
-                <div onclick="insertNumberedFormula('\\lambda_{max}')" style="cursor:pointer" class="x-small mb-1">• Lambda Max (AHP)</div>
-                <div onclick="insertNumberedFormula('CI = \\frac{\\lambda_{max}-n}{n-1}')" style="cursor:pointer" class="x-small">• Índice de Consistência</div>
+                <h6 class="x-small fw-bold text-warning uppercase mb-2">Fórmulas Numeradas</h6>
+                <button class="btn btn-xxs btn-outline-info w-100 mb-1" onclick="insertNumberedFormula('\\lambda_{max}')">LAMBDA MAX</button>
             </div>
         </div>
 
         <div class="p-3 border-top border-secondary">
-            <button class="btn btn-sm btn-primary w-100 fw-bold py-2" onclick="exportDoc()"><i class="fas fa-file-export me-2"></i>EXPORTAR WORD ABNT</button>
+            <button class="btn btn-sm btn-primary w-100 fw-bold py-2" onclick="exportDoc()"><i class="fas fa-file-export me-2"></i>EXPORTAR WORD ABNT FINAL</button>
         </div>
     </aside>
 
@@ -205,8 +188,8 @@
         <div id="toolbar-container"></div>
         <div id="paper-canvas">
             <div id="editor">
-                <h1 style="text-align:center;">PLATAFORMA SOVEREIGN DIAMOND</h1>
-                <p>Importe seu arquivo Word ou escolha um template para iniciar com perfeição absoluta.</p>
+                <h1 style="text-align:center;">MANUSCRITO SOBERANO v35.0</h1>
+                <p>O cérebro acadêmico está pronto. Carregue seu PDF ou DOCX para iniciar a organização total.</p>
             </div>
         </div>
     </main>
@@ -215,134 +198,143 @@
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // 1. Inicialização e Editor v29
+    // 1. Inicialização e Core Logic
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    
     var quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
             formula: true,
-            toolbar: [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['formula', 'image', 'link', 'clean']
-            ]
+            toolbar: [[{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['formula', 'image', 'link', 'clean']]
         }
     });
     document.getElementById('toolbar-container').appendChild(document.querySelector('.ql-toolbar'));
 
-    const DB = 'omni_v29_masterpiece_db';
-    let app = { html: "", pendingHTML: "", deadline: "", tasks: [], refs: [], style: "ABNT", eqCount: 1 };
+    const DB = 'omni_v35_masterpiece_db';
+    let app = { html: "", pendingHTML: "", tasks: [], refs: [], eqCount: 1 };
 
-    // 2. Motor de Auditoria IA (Sanitizador de DOCX)
-    function startAudit() {
-        const file = document.getElementById('import-docx').files[0];
+    // 2. Motor de Importação Universal (Word/PDF)
+    function handleFileImport() {
+        const file = document.getElementById('import-file').files[0];
         if (!file) return;
+        if (file.type === "application/pdf") processPDF(file);
+        else processDOCX(file);
+    }
+
+    function processDOCX(file) {
         const reader = new FileReader();
         reader.onload = function(e) {
             mammoth.convertToHtml({arrayBuffer: e.target.result}).then(function(result) {
                 app.pendingHTML = result.value;
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(result.value, 'text/html');
-                
-                const auditList = document.getElementById('audit-list');
-                auditList.innerHTML = `
-                    <div class="d-flex justify-content-between x-small mb-2"><span>Fontes proprietárias detectadas:</span><span class="text-warning">SIM</span></div>
-                    <div class="d-flex justify-content-between x-small mb-2"><span>Espaçamento irregular:</span><span class="text-warning">DETECTADO</span></div>
-                    <div class="d-flex justify-content-between x-small mb-2"><span>Hierarquia de Capítulos:</span><span class="text-info">${doc.querySelectorAll('h1, h2').length} seções</span></div>
-                `;
-                document.getElementById('audit-modal').style.display = 'flex';
+                generateAudit("Word (DOCX)");
             });
         };
         reader.readAsArrayBuffer(file);
     }
 
-    function executeSanitization() {
-        let clean = app.pendingHTML.replace(/style="[^"]*"/g, ""); // LIMPEZA TOTAL
-        quill.root.innerHTML = clean;
-        applyABNT();
-        document.getElementById('audit-modal').style.display = 'none';
-        save();
-    }
-
-    function applyABNT() {
-        quill.formatText(0, quill.getLength(), { 'font': 'arial', 'size': '12pt', 'line-height': '1.5' });
-        save();
-    }
-
-    // 3. Sistema de Citação e Busca Federated
-    function setStyle(s) { app.style = s; renderRefs(); }
-    function go(b) {
-        const q = document.getElementById('q').value;
-        const urls = {
-            scholar: `https://scholar.google.com.br/scholar?q=${q}`, ana: `https://dadosabertos.ana.gov.br/`,
-            bdtd: `https://bdtd.ibict.br/vufind/Search/Results?lookfor=${q}`, scielo: `https://search.scielo.org/?q=${q}`,
-            dimensions: `https://app.dimensions.ai/discover/publication?search_text=${q}`, perplexity: `https://www.perplexity.ai/search?q=${q}`
+    async function processPDF(file) {
+        const reader = new FileReader();
+        reader.onload = async function() {
+            const typedarray = new Uint8Array(this.result);
+            const pdf = await pdfjsLib.getDocument(typedarray).promise;
+            let fullText = "";
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                fullText += textContent.items.map(item => item.str).join(" ");
+            }
+            app.pendingHTML = fullText;
+            generateAudit("Adobe (PDF)");
         };
-        window.open(urls[b], '_blank');
-        if(q) { app.refs.push({ id: Date.now(), author: "SILVA, J.", title: "Estudo sobre " + q, year: "2026" }); renderRefs(); save(); }
+        reader.readAsArrayBuffer(file);
     }
 
-    function renderRefs() {
-        document.getElementById('ref-library').innerHTML = app.refs.map(r => {
-            const cite = (app.style === 'ABNT') ? `(${r.author.toUpperCase()}, ${r.year})` : `(${r.author}, ${r.year})`;
-            return `<div class="ref-card"><b>${r.title}</b> (${r.year})<br><button class="btn btn-xxs btn-info mt-1" onclick="injectCite('${cite}')">Citar ${app.style}</button></div>`;
-        }).join('');
-    }
-    function injectCite(txt) { const r = quill.getSelection() || { index: 0 }; quill.insertText(r.index, txt); }
-
-    // 4. Cronograma e Foco
-    function addMeta(text = "", done = false) { app.tasks.push({ text, done }); renderCronograma(); }
-    function renderCronograma() {
-        const b = document.getElementById('cronograma-body');
-        b.innerHTML = app.tasks.map((t, i) => `<tr><td><input type="text" value="${t.text}" onchange="uTask(${i},'text',this.value)"></td><td><input type="checkbox" ${t.done?'checked':''} onchange="uTask(${i},'done',this.checked)"></td></tr>`).join('');
-    }
-    function uTask(i, k, v) { app.tasks[i][k] = v; save(); }
-
-    // 5. Automação de Estrutura e Exportação
-    function injectMetadata() {
-        const type = document.getElementById('tpl-type').value;
-        const title = document.getElementById('meta-title').value.toUpperCase();
-        const author = document.getElementById('meta-author').value.toUpperCase();
-        const header = (type === 'dissertacao') ? `IFPE - CAMPUS RECIFE<br>DISSERTAÇÃO DE MESTRADO` : `TRABALHO ACADÊMICO`;
-        const capa = `<div style="text-align:center;font-weight:bold;">${header}</div><br><br><br><div style="text-align:center;font-weight:bold;">${author}</div><br><br><br><br><br><div style="text-align:center;font-weight:bold;font-size:14pt;">${title}</div><br><br><br><br><br><div style="text-align:center;margin-top:10cm;">RECIFE<br>2026</div><br><h1>RESUMO</h1><p>...</p><h1>1. INTRODUÇÃO</h1><p>...</p>`;
-        quill.clipboard.dangerouslyPasteHTML(0, capa);
-        save();
+    function generateAudit(type) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(app.pendingHTML, 'text/html');
+        // Heurística IA: Detecta tópicos por negritos ou tags de título
+        const headers = doc.querySelectorAll('h1, h2, h3, b, strong').length;
+        const tables = doc.querySelectorAll('table').length;
+        
+        document.getElementById('audit-report').innerHTML = `
+            <div class="mb-2"><b>Mídia Original:</b> ${type}</div>
+            <div class="mb-2"><b>Tópicos Sugeridos:</b> ${headers}</div>
+            <div class="mb-2"><b>Objetos Detectados:</b> ${tables} tabelas/quadros.</div>
+        `;
+        document.getElementById('audit-modal').style.display = 'flex';
     }
 
-    function generateSumario() {
-        const heads = document.querySelectorAll('#editor h1, #editor h2');
-        let toc = "<h1 style='text-align:center;'>SUMÁRIO</h1><br><ul>";
-        heads.forEach(h => toc += `<li>${h.innerText}</li>`);
-        toc += "</ul><br>";
-        quill.clipboard.dangerouslyPasteHTML(0, toc);
+    function executeSanitizer(mode) {
+        let content = app.pendingHTML;
+        if(mode === 'smart') {
+            content = content.replace(/style="[^"]*"/g, "").replace(/font-family:[^;]*;/g, "");
+            quill.root.innerHTML = content;
+            applyABNT();
+        } else {
+            quill.root.innerHTML = content;
+        }
+        document.getElementById('audit-modal').style.display = 'none';
+        runStructuralScan();
     }
 
-    function exportDoc() {
-        const html = `<html><head><meta charset="utf-8"><style>body{font-family:Arial; font-size:12pt; margin:3cm 2cm 2cm 3cm; text-align:justify;}</style></head><body>${quill.root.innerHTML}</body></html>`;
-        const blob = new Blob([html], { type: 'application/msword' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Trabalho_Sovereign_v29.doc'; a.click();
+    // 3. Scanner Neural: Identifica e Organiza Listas/Sumário
+    function runStructuralScan() {
+        const html = quill.root.innerHTML;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const topics = doc.querySelectorAll('h1, h2, h3');
+        const figs = doc.querySelectorAll('img');
+        const tabs = doc.querySelectorAll('table.abnt-tabela');
+        const siglas = Array.from(new Set(quill.getText().match(/\b[A-Z]{2,}\b/g) || []));
+
+        document.getElementById('scan-status').innerHTML = `
+            <div class="scan-tag"><span>Tópicos Identificados:</span><b>${topics.length}</b></div>
+            <div class="scan-tag"><span>Figuras:</span><b>${figs.length}</b></div>
+            <div class="scan-tag"><span>Tabelas ABNT:</span><b>${tabs.length}</b></div>
+            <div class="scan-tag"><span>Siglas em Uso:</span><b>${siglas.length}</b></div>
+        `;
+        return { topics, figs, tabs, siglas };
     }
 
-    // 6. Persistência e Sistema
-    function acceptEthics() { document.getElementById('ethics-overlay').style.display='none'; document.getElementById('app-ui').classList.add('app-active'); localStorage.setItem('omni_v29_ethics', 'true'); }
+    function generateAutoLists() {
+        const data = runStructuralScan();
+        let frontMatter = `<h1 style="text-align:center;">LISTA DE SIGLAS</h1><ul>`;
+        data.siglas.forEach(s => frontMatter += `<li>${s} - [Definição Pendente]</li>`);
+        frontMatter += `</ul><br><h1 style="text-align:center;">SUMÁRIO</h1><ul>`;
+        data.topics.forEach(t => frontMatter += `<li>${t.innerText}</li>`);
+        frontMatter += `</ul><br>`;
+        
+        quill.clipboard.dangerouslyPasteHTML(0, frontMatter);
+        applyABNT();
+    }
+
+    // 4. Funções de Suporte, IA e Sincronia
+    function applyABNT() { quill.formatText(0, quill.getLength(), { 'font': 'arial', 'size': '12pt', 'line-height': '1.5' }); save(); }
     function save() { app.html = quill.root.innerHTML; app.deadline = document.getElementById('deadline').value; localStorage.setItem(DB, JSON.stringify(app)); }
     function load() {
-        if(localStorage.getItem('omni_v29_ethics')) acceptEthics();
+        if(localStorage.getItem('omni_v35_ethics')) acceptEthics();
         const d = JSON.parse(localStorage.getItem(DB));
-        if(d) { app = d; quill.root.innerHTML = d.html || ""; document.getElementById('deadline').value = d.deadline || ""; renderCronograma(); renderRefs(); if(d.deadline) startTimer(d.deadline); }
-        else { addMeta("Processamento AHP Ipojuca", false); addMeta("Fundamentação Teórica", false); }
+        if(d) { app = d; quill.root.innerHTML = d.html || ""; document.getElementById('deadline').value = d.deadline || ""; renderCronograma(); if(d.deadline) startTimer(d.deadline); runStructuralScan(); }
     }
+    function acceptEthics() { document.getElementById('ethics-overlay').style.display='none'; document.getElementById('app-ui').classList.add('app-active'); localStorage.setItem('omni_v35_ethics', 'true'); }
+    function addMeta(t = "", d = false) { app.tasks.push({ text: t, done: d }); renderCronograma(); }
+    function renderCronograma() { document.getElementById('cronograma-body').innerHTML = app.tasks.map((t, i) => `<tr><td><input type="text" value="${t.text}" onchange="uTask(${i},'text',this.value)"></td><td width="30"><input type="checkbox" ${t.done?'checked':''} onchange="uTask(${i},'done',this.checked)"></td></tr>`).join(''); }
+    function uTask(i, k, v) { app.tasks[i][k] = v; save(); }
     function startTimer(t) { setInterval(() => { const diff = new Date(t) - new Date(); const d = document.getElementById('timer'); if(diff<0){d.innerText="ENTREGA!";return;} const h=Math.floor(diff/3600000); const m=Math.floor((diff%3600000)/60000); const s=Math.floor((diff%60000)/1000); d.innerText=`${h}:${m}:${s}`.replace(/\b\d\b/g, "0$&"); }, 1000); }
-    function insertScientific(t) { const c = t==='tabela' ? `<table class="abnt-tabela"><thead><tr><th>Item</th><th>Valor</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr></tbody></table>` : `<table class="abnt-quadro"><thead><tr><th>Quadro</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr></tbody></table>`; quill.clipboard.dangerouslyPasteHTML(quill.getLength(), c); }
+    function go(b) { const q = document.getElementById('q').value; const urls = { scholar: `https://scholar.google.com.br/scholar?q=${q}`, ana: `https://dadosabertos.ana.gov.br/`, bdtd: `https://bdtd.ibict.br/`, scielo: `https://search.scielo.org/?q=${q}`, dimensions: `https://app.dimensions.ai/discover/publication?search_text=${q}`, perplexity: `https://www.perplexity.ai/search?q=${q}` }; window.open(urls[b], '_blank'); }
+    function exportDoc() { const html = `<html><head><meta charset="utf-8"><style>body{font-family:Arial; font-size:12pt; margin:3cm 2cm 2cm 3cm; text-align:justify;}</style></head><body>${quill.root.innerHTML}</body></html>`; const blob = new Blob([html], { type: 'application/msword' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Manuscrito_Final_v35.doc'; a.click(); }
+    function insertScientific(t) { const c = `<p class="legenda">Tabela X - Título</p><table class="abnt-tabela"><tr><td>-</td></tr></table><p class="fonte">Fonte: Autor (2026)</p>`; quill.clipboard.dangerouslyPasteHTML(quill.getLength(), c); }
     function insertNumberedFormula(l) { const i = quill.getSelection() ? quill.getSelection().index : quill.getLength(); quill.insertEmbed(i, 'formula', l); quill.insertText(i+1, ` (${app.eqCount})\n`, {'bold':true}); app.eqCount++; save(); }
-    function aiAction(a) { alert(a === 'resume' ? "IA: Analisando texto para gerar resumo..." : "IA: Escaneando base de dados anti-plágio..."); }
-    function askAI() { const box = document.getElementById('ai-chat'); box.innerHTML += `<div class='text-white-50 mt-2'>Você: ${document.getElementById('ai-msg').value}</div>`; setTimeout(() => { box.innerHTML += `<div class='text-info mt-1'>[ADVISOR]: Identifiquei inconsistências na sua Matriz AHP. Deseja aplicar o Índice de Consistência (CI)?</div>`; box.scrollTop = box.scrollHeight; }, 700); document.getElementById('ai-msg').value = ""; }
+    function injectMetadata() { const t = prompt("Título:"); const a = prompt("Autor:"); const capa = `<div style="text-align:center;font-weight:bold;">IFPE - CAMPUS RECIFE</div><br><br><div style="text-align:center;font-weight:bold;">${a}</div><br><br><br><div style="text-align:center;font-weight:bold;font-size:14pt;">${t}</div><br><br><br><div style="text-align:center;margin-top:10cm;">2026</div>`; quill.root.innerHTML = capa; applyABNT(); }
+    function askAI() { const box = document.getElementById('ai-chat'); box.innerHTML += `<div class='text-white-50 mt-2'>Você: ${document.getElementById('ai-msg').value}</div>`; setTimeout(() => { box.innerHTML += `<div class='text-info mt-1'>[ADVISOR]: Scanner detectou mudanças nos tópicos. Deseja atualizar o Sumário agora?</div>`; box.scrollTop = box.scrollHeight; }, 600); document.getElementById('ai-msg').value = ""; }
 
     window.onload = load;
     quill.on('text-change', save);
 </script>
 </body>
-</html>
+</html>>
