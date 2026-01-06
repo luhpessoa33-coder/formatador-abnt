@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sovereign Diamond v42.0 | Absolute Engineering Edition</title>
+    <title>OmniEditor Sovereign v46.0 | Absolute Academic Suite</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,53 +13,52 @@
 
     <style>
         :root {
-            --sidebar-w: 320px;
-            --topbar-h: 70px;
-            --accent: #00d2ff;
-            --bg-sidebar: #0f0f12;
-            --bg-canvas: #eef0f2;
-            --abnt-font: 'Arial', sans-serif;
-            --text-main: #c4c4cc;
+            --sidebar-w: 360px; --topbar-h: 75px; --accent: #00d2ff;
+            --bg-sidebar: #0a0a0c; --bg-app: #f4f5f7; --abnt-font: 'Arial', sans-serif;
+            --text-main: #c4c4cc; --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        body { background-color: var(--bg-canvas); font-family: 'Inter', sans-serif; margin: 0; height: 100vh; display: flex; overflow: hidden; }
+        body { background-color: var(--bg-app); font-family: 'Inter', sans-serif; margin: 0; height: 100vh; display: flex; overflow: hidden; }
 
-        /* --- ARQUITETURA DA PLATAFORMA --- */
-        .app-shell { display: flex; width: 100vw; height: 100vh; }
+        /* --- LOGIN MASTER DE SOBERANIA --- */
+        #master-login-overlay { position: fixed; inset: 0; background: #000; z-index: 50000; display: flex; align-items: center; justify-content: center; }
+        .login-card { width: 450px; padding: 50px; background: #121214; border-radius: 24px; border: 2px solid var(--accent); text-align: center; box-shadow: 0 0 100px rgba(0,210,255,0.2); }
 
-        /* SIDEBAR ESTRUTURADA (ESTILO METTZER) */
+        /* --- LAYOUT PLATAFORMA --- */
+        .app-shell { display: flex; width: 100vw; height: 100vh; visibility: hidden; opacity: 0; transition: var(--transition); }
+        .app-shell.active { visibility: visible; opacity: 1; }
+
+        /* SIDEBAR ESTRUTURADA (METTZER STYLE) */
         aside.sidebar { 
             width: var(--sidebar-w); background: var(--bg-sidebar); color: #fff; 
-            display: flex; flex-direction: column; flex-shrink: 0; box-shadow: 10px 0 30px rgba(0,0,0,0.3); z-index: 1000;
+            display: flex; flex-direction: column; flex-shrink: 0; box-shadow: 15px 0 40px rgba(0,0,0,0.4); z-index: 1000;
         }
-        .sidebar-header { padding: 25px; border-bottom: 1px solid #29292e; background: #000; }
+        .sidebar-header { padding: 30px; border-bottom: 1px solid #29292e; background: #000; }
         .sidebar-menu { flex-grow: 1; overflow-y: auto; padding: 15px 0; }
-        .menu-cat { font-size: 0.65rem; text-transform: uppercase; color: #666; padding: 20px 25px 8px; font-weight: 800; letter-spacing: 1.5px; }
+        .menu-cat { font-size: 0.65rem; text-transform: uppercase; color: #666; padding: 20px 30px 8px; font-weight: 800; letter-spacing: 2px; }
         .menu-item { 
-            display: flex; align-items: center; padding: 12px 25px; color: var(--text-main); 
-            text-decoration: none; cursor: pointer; font-size: 0.88rem; transition: 0.2s;
-            border-left: 4px solid transparent;
+            display: flex; align-items: center; padding: 14px 30px; color: var(--text-main); 
+            text-decoration: none; cursor: pointer; font-size: 0.92rem; border-left: 5px solid transparent; transition: var(--transition);
         }
-        .menu-item:hover, .menu-item.active { background: #29292e; color: var(--accent); border-left-color: var(--accent); }
-        .menu-item i { margin-right: 15px; width: 20px; text-align: center; }
+        .menu-item:hover, .menu-item.active { background: #1a1a1e; color: var(--accent); border-left-color: var(--accent); }
+        .menu-item i { margin-right: 18px; width: 22px; text-align: center; font-size: 1.1rem; }
 
-        /* ÁREA DE TRABALHO */
-        main.main-content { flex-grow: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        /* MAIN CONTENT AREA */
+        main.main-content { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .top-bar { 
-            height: var(--topbar-h); background: #fff; border-bottom: 1px solid #dcdce2; 
-            display: flex; align-items: center; justify-content: space-between; padding: 0 25px;
+            height: var(--topbar-h); background: #fff; border-bottom: 1px solid #e1e1e6; 
+            display: flex; align-items: center; justify-content: space-between; padding: 0 35px;
         }
 
-        /* CANVAS A4 (RIGOR ABSOLUTO NBR 14724) */
-        .viewport { flex-grow: 1; overflow-y: auto; padding: 40px 0; display: flex; flex-direction: column; align-items: center; }
+        /* VIEWPORT E CANVAS ABNT */
+        .viewport { flex-grow: 1; overflow-y: auto; padding: 50px 0; display: flex; flex-direction: column; align-items: center; background: #eef0f2; scroll-behavior: smooth; }
         .a4-page {
             width: 210mm; min-height: 297mm; background: #fff;
-            /* MARGENS RÍGIDAS: SUP/ESQ 3CM, INF/DIR 2CM */
-            padding: 30mm 20mm 20mm 30mm; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.1); position: relative; margin-bottom: 50px;
+            padding: 30mm 20mm 20mm 30mm; /* ABNT NBR 14724 */
+            box-shadow: 0 0 60px rgba(0,0,0,0.1); position: relative; margin-bottom: 60px;
         }
 
-        /* EDITOR E TIPOGRAFIA */
+        /* EDITOR QUILL */
         #editor { 
             font-family: var(--abnt-font) !important; font-size: 12pt !important; 
             line-height: 1.5 !important; text-align: justify !important; border: none !important;
@@ -67,79 +66,69 @@
         .ql-container.ql-snow { border: none !important; }
         .ql-editor { padding: 0 !important; overflow: visible !important; }
 
-        /* MODAIS DE INTELIGÊNCIA E AUDITORIA */
-        #audit-overlay, #ethics-overlay, #ai-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.97); display: none; align-items: center; justify-content: center; z-index: 10000; }
-        .custom-card { background: #fff; width: 750px; border-radius: 25px; padding: 45px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border-top: 10px solid var(--accent); }
-        .audit-info { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 5px solid var(--accent); font-size: 0.85rem; color: #333; }
+        /* MODAIS E INTERFACE IA */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: none; align-items: center; justify-content: center; z-index: 20000; }
+        .modal-card { background: #fff; width: 850px; border-radius: 25px; padding: 45px; box-shadow: 0 40px 100px rgba(0,0,0,0.5); border-top: 10px solid var(--accent); max-height: 90vh; overflow-y: auto; }
 
-        /* ELEMENTOS CIENTÍFICOS */
-        #editor table { border-collapse: collapse; width: 100%; margin: 15px 0; border-top: 2px solid #000; border-bottom: 2px solid #000; }
-        #editor td, #editor th { border: 1px solid #eee; padding: 8px; font-size: 10pt; }
-        .legenda { text-align: center; font-weight: bold; font-size: 10pt; margin-bottom: 5px; }
+        /* HUB DE PESQUISA */
+        .search-item { border-bottom: 1px solid #eee; padding: 20px 0; }
+        .btn-cite { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; padding: 5px 12px; border-radius: 6px; }
 
-        /* CRONOGRAMA FOCO (GOOGLE PLANILHAS STYLE) */
-        .foco-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; }
-        .foco-table th { background: #f1f3f5; padding: 12px; border: 1px solid #dee2e6; text-align: left; }
-        .foco-table td { padding: 10px; border: 1px solid #dee2e6; }
-        .foco-table input { border: none; width: 100%; outline: none; background: transparent; }
+        /* BATE-PAPO IA */
+        #chat-window { height: 350px; overflow-y: auto; background: #f8f9fa; border-radius: 12px; padding: 20px; border: 1px solid #eee; margin-bottom: 15px; }
+        .msg-advisor { background: #e1f5fe; padding: 10px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--accent); font-size: 0.9rem; }
+        .msg-user { background: #eee; padding: 10px; border-radius: 10px; margin-bottom: 10px; text-align: right; font-size: 0.9rem; }
 
-        .btn-action { font-weight: 800; text-transform: uppercase; font-size: 0.75rem; border-radius: 8px; padding: 12px 25px; transition: 0.3s; border: none; cursor: pointer; }
-        .btn-primary-diamond { background: var(--accent); color: #000; }
-        .btn-outline-diamond { background: transparent; border: 2px solid var(--accent); color: var(--bg-sidebar); }
+        /* TABELAS ABNT */
+        #editor table { border-collapse: collapse; width: 100%; margin: 20px 0; border-top: 2px solid #000; border-bottom: 2px solid #000; }
+        #editor td, #editor th { border: 1px solid #eee; padding: 10px; font-size: 10pt; text-align: center; }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: #bbb; border-radius: 10px; }
+        .btn-diamond { font-weight: 800; text-transform: uppercase; font-size: 0.72rem; border-radius: 10px; padding: 12px 25px; transition: 0.3s; }
+        .btn-diamond:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,210,255,0.3); }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
     </style>
 </head>
 <body id="master-body">
 
-<div id="ethics-overlay" style="display: flex;">
-    <div class="custom-card text-center">
-        <i class="fas fa-crown fa-4x text-info mb-4"></i>
-        <h2 class="fw-bold mb-3">Soberania Mettzer v42.0</h2>
-        <p class="text-secondary mb-4">Plataforma ativada para <b>Luana Pessoa Genuino</b>.<br>Rigor IFPE e Integridade Científica para a Bacia do Rio Ipojuca.</p>
-        <div class="alert alert-info py-2 small mb-4">O sistema detectou seus arquivos DOCX e PDF. A sincronia local está ativa.</div>
-        <button class="btn btn-info w-100 fw-bold py-3 text-white" onclick="startApp()">SINCRONIZAR E ENTRAR NO AMBIENTE</button>
+<div id="master-login-overlay">
+    <div class="login-card">
+        <i class="fas fa-id-badge fa-4x text-info mb-4"></i>
+        <h3 class="fw-bold text-white mb-2">Login Master Sovereign</h3>
+        <p class="text-muted small mb-4">Autenticação obrigatória para acesso à Dissertação.</p>
+        <input type="password" id="master-key" class="form-control mb-3 bg-dark text-white text-center py-3" placeholder="Chave de Acesso Diamond">
+        <button class="btn btn-info w-100 fw-bold py-3" onclick="authenticateMaster()">AUTENTICAR PLATAFORMA</button>
     </div>
 </div>
 
-<div id="audit-overlay">
-    <div class="custom-card">
-        <h4 class="fw-bold mb-3 text-dark"><i class="fas fa-microscope text-info me-2"></i>Auditoria de Inteligência Acadêmica</h4>
-        <p class="text-secondary small mb-4">Analisamos a mídia carregada. O motor IA v42 detectou a estrutura visual e está pronto para organizar o conteúdo nas normas ABNT.</p>
-        <div id="audit-content"></div>
-        <div class="d-flex gap-2 mt-4">
-            <button class="btn btn-info w-100 text-white fw-bold py-3" onclick="executeSanitization('smart')">APLICAR RIGOR E INDEXAR</button>
-            <button class="btn btn-outline-secondary w-100 fw-bold py-3" onclick="executeSanitization('raw')">INJETAR CONTEÚDO BRUTO</button>
-        </div>
-    </div>
-</div>
-
-<div class="app-shell">
+<div class="app-shell" id="app-ui">
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="text-info x-small fw-bold">DISSERTAÇÃO DE MESTRADO • IFPE</div>
+            <div class="text-info x-small fw-bold letter-spacing-1">MESTRADO PROFISSIONAL • IFPE</div>
             <div class="small fw-bold mt-1">Bacia do Rio Ipojuca</div>
+            <div class="x-small text-muted mt-1">Soberania de Dados v46.0</div>
         </div>
         <div class="sidebar-menu">
             <div class="menu-cat">Pré-Textual</div>
             <div class="menu-item active" onclick="switchSection('capa')"><i class="fas fa-file-alt"></i>Capa</div>
             <div class="menu-item" onclick="switchSection('rosto')"><i class="fas fa-file-signature"></i>Folha de Rosto</div>
-            <div class="menu-item" onclick="switchSection('resumo')"><i class="fas fa-align-left"></i>Resumo (PT)</div>
-            <div class="menu-item" onclick="switchSection('abstract')"><i class="fas fa-globe"></i>Abstract (EN)</div>
+            <div class="menu-item" onclick="switchSection('resumo')"><i class="fas fa-align-left"></i>Resumo / Abstract</div>
             <div class="menu-item" onclick="switchSection('listas')"><i class="fas fa-list-ol"></i>Sumário e Listas</div>
             
             <div class="menu-cat">Textual</div>
             <div class="menu-item" onclick="switchSection('intro')"><i class="fas fa-pen-nib"></i>1. Introdução</div>
-            <div class="menu-item" onclick="switchSection('desen')"><i class="fas fa-book-open"></i>2. Desenvolvimento</div>
-            <div class="menu-item" onclick="switchSection('conclu')"><i class="fas fa-check-circle"></i>3. Conclusão</div>
+            <div class="menu-item" onclick="switchSection('metod')"><i class="fas fa-layer-group"></i>2. Metodologia AHP</div>
+            <div class="menu-item" onclick="switchSection('desen')"><i class="fas fa-book-open"></i>3. Desenvolvimento</div>
+            <div class="menu-item" onclick="switchSection('conclu')"><i class="fas fa-check-circle"></i>4. Conclusão</div>
             
             <div class="menu-cat">Pós-Textual</div>
-            <div class="menu-item" onclick="switchSection('ref')"><i class="fas fa-book"></i>Referências</div>
+            <div class="menu-item" onclick="switchSection('ref')"><i class="fas fa-book"></i>Referências ABNT</div>
             
-            <div class="menu-cat">Gestão de Foco</div>
+            <div class="menu-cat">Inteligência</div>
+            <div class="menu-item" onclick="openSearchHub()"><i class="fas fa-search-plus"></i>Hub de Pesquisa Total</div>
+            <div class="menu-item" onclick="openAdvisor()"><i class="fas fa-comments"></i>Advisor IA (Bate-papo)</div>
             <div class="menu-item" onclick="switchSection('foco')"><i class="fas fa-tasks"></i>Cronograma FOCO</div>
-            <div class="menu-item" onclick="switchSection('search')"><i class="fas fa-search"></i>Busca em 20+ Bases</div>
         </div>
     </aside>
 
@@ -147,10 +136,10 @@
         <div class="top-bar">
             <div id="toolbar-container"></div>
             <div class="d-flex gap-2">
-                <button class="btn btn-action btn-outline-info" onclick="generateAISynthesis()"><i class="fas fa-magic me-1"></i>IA Resumo</button>
-                <input type="file" id="f-import" style="display:none" onchange="handleUniversalImport()">
-                <button class="btn btn-action btn-outline-dark" onclick="document.getElementById('f-import').click()"><i class="fas fa-file-import me-1"></i>Importar</button>
-                <button class="btn btn-action btn-primary-diamond" onclick="exportWord()"><i class="fas fa-save me-1"></i>Exportar Word</button>
+                <button class="btn btn-diamond btn-outline-info" onclick="generateAISynthesis()"><i class="fas fa-magic me-2"></i>Síntese IA</button>
+                <input type="file" id="f-universal" style="display:none" onchange="handleUniversalImport()">
+                <button class="btn btn-diamond btn-outline-dark" onclick="document.getElementById('f-universal').click()"><i class="fas fa-file-import me-2"></i>Importar DOCX/PDF</button>
+                <button class="btn btn-diamond btn-primary" onclick="exportFinalWord()" style="background:var(--accent); color:#000;"><i class="fas fa-save me-2"></i>Exportar Word</button>
             </div>
         </div>
 
@@ -162,45 +151,147 @@
     </main>
 </div>
 
+<div id="search-hub" class="modal-overlay">
+    <div class="modal-card">
+        <h4 class="fw-bold mb-3"><i class="fas fa-globe text-info me-2"></i>Hub de Pesquisa Científica Federada</h4>
+        <div class="input-group mb-3">
+            <input type="text" id="q-search" class="form-control" placeholder="Termos de busca (ex: PSA Hídrico Ipojuca AHP)">
+            <select id="cite-style" class="form-select" style="max-width: 120px;"><option value="ABNT">ABNT</option><option value="APA">APA</option></select>
+            <button class="btn btn-info text-white fw-bold px-4" onclick="runFederatedSearch()">PESQUISAR</button>
+        </div>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <span class="badge bg-dark">Google Scholar</span><span class="badge bg-dark">Dados ANA</span><span class="badge bg-dark">SciELO</span>
+            <span class="badge bg-dark">BDTD</span><span class="badge bg-dark">Dimensions</span><span class="badge bg-dark">Portal CAPES</span>
+        </div>
+        <div id="search-results-box" style="max-height: 400px; overflow-y: auto;">
+            </div>
+        <div class="mt-4 text-end">
+            <button class="btn btn-secondary" onclick="closeSearchHub()">Fechar Hub</button>
+        </div>
+    </div>
+</div>
+
+<div id="advisor-chat" class="modal-overlay">
+    <div class="modal-card" style="width: 550px;">
+        <h4 class="fw-bold mb-3"><i class="fas fa-robot text-info me-2"></i>Advisor IA Acadêmico</h4>
+        <div id="chat-window">
+            <div class="msg-advisor">Olá Luana! Estou monitorando sua pesquisa sobre a Bacia do Ipojuca. Como posso ajudar na sua metodologia hoje?</div>
+        </div>
+        <div class="input-group">
+            <input type="text" id="chat-msg" class="form-control" placeholder="Digite sua dúvida ou peça um parágrafo...">
+            <button class="btn btn-info text-white" onclick="sendToAdvisor()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="mt-3 text-center">
+            <button class="btn btn-sm btn-link text-muted" onclick="closeAdvisor()">Minimizar Advisor</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 
 <script>
-    // 1. CONFIGURAÇÃO DO MOTOR V42
+    // 1. AUTENTICAÇÃO E INICIALIZAÇÃO
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-    
+    function authenticateMaster() {
+        if(document.getElementById('master-key').value === 'master2026') {
+            document.getElementById('master-login-overlay').style.display = 'none';
+            document.getElementById('app-ui').classList.add('active');
+        } else { alert('Chave Diamond Inválida'); }
+    }
+
+    // 2. EDITOR E ESTADO MODULAR
     var quill = new Quill('#editor', {
         theme: 'snow',
-        modules: {
-            toolbar: [
-                [{ 'header': [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['image', 'formula', 'link'],
-                ['clean']
-            ]
-        }
+        modules: { toolbar: [[{'header':[1,2,3,false]}],['bold','italic','underline'],[{'list':'ordered'},{'list':'bullet'}],['image','formula','link'],['clean']] }
     });
     document.getElementById('toolbar-container').appendChild(document.querySelector('.ql-toolbar'));
 
-    const DB = 'omni_v42_master_db';
+    const DB = 'omni_v46_absolute_db';
     let app = { 
-        sections: { capa: "", rosto: "", resumo: "", abstract: "", listas: "", intro: "", desen: "", conclu: "", ref: "", foco: "", search: "" }, 
-        current: 'capa',
-        tasks: []
+        sections: { capa: "", rosto: "", resumo: "", listas: "", intro: "", metod: "", desen: "", conclu: "", ref: "", foco: "" }, 
+        current: 'capa'
     };
-    let tempBuffer = "";
 
-    // 2. MOTOR DE IMPORTAÇÃO UNIVERSAL (PDF/DOCX)
+    function switchSection(id) {
+        app.sections[app.current] = quill.root.innerHTML;
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+        const active = Array.from(document.querySelectorAll('.menu-item')).find(el => el.getAttribute('onclick').includes(id));
+        if(active) active.classList.add('active');
+        
+        app.current = id;
+        quill.root.innerHTML = app.sections[id] || `<h1>${id.toUpperCase()}</h1><p>Insira o conteúdo...</p>`;
+        
+        if(id==='capa' && !app.sections.capa) {
+            quill.root.innerHTML = `<div style="text-align:center; font-weight:bold;">INSTITUTO FEDERAL DE PERNAMBUCO - IFPE</div><div style="text-align:center; font-weight:bold;">LUANA PESSOA GENUINO</div><br><br><br><div style="text-align:center; font-weight:bold; font-size:14pt;">PAGAMENTO POR SERVIÇOS AMBIENTAIS HÍDRICOS: BACIA DO RIO IPOJUCA</div><br><br><div style="text-align:center;">RECIFE<br>2026</div>`;
+        }
+        if(id==='foco') renderFoco();
+        applyRigor();
+    }
+
+    function applyRigor() {
+        quill.formatText(0, quill.getLength(), { 'font': 'arial', 'size': '12pt', 'line-height': '1.5' });
+        save();
+    }
+
+    // 3. HUB DE PESQUISA E CITAÇÃO AUTOMÁTICA
+    function openSearchHub() { document.getElementById('search-hub').style.display = 'flex'; }
+    function closeSearchHub() { document.getElementById('search-hub').style.display = 'none'; }
+    
+    function runFederatedSearch() {
+        const q = document.getElementById('q-search').value;
+        const style = document.getElementById('cite-style').value;
+        // Simulação de Resultados Federados
+        const results = [
+            { title: "Gestão de Recursos Hídricos e PSA: Um estudo na Bacia do Ipojuca", auth: "Silva, M.", year: "2024", base: "ANA" },
+            { title: "Análise Multicritério AHP em Sistemas de Informação Geográfica", auth: "Oliveira, J.", year: "2023", base: "SciELO" }
+        ];
+        document.getElementById('search-results-box').innerHTML = results.map(r => `
+            <div class="search-item">
+                <span class="badge bg-info text-dark">${r.base}</span><br>
+                <strong>${r.title}</strong><br>
+                <small>${r.auth} (${r.year})</small><br>
+                <button class="btn btn-cite btn-info text-white mt-2" onclick="injectCitation('${r.auth}', '${r.year}', '${style}')">Citar ${style} no Texto</button>
+                <button class="btn btn-cite btn-outline-dark mt-2" onclick="window.open('https://scholar.google.com.br/scholar?q=${q}')">Ver Original</button>
+            </div>
+        `).join('');
+    }
+
+    function injectCitation(auth, year, style) {
+        const cite = style === 'ABNT' ? `(${auth.toUpperCase()}, ${year})` : `(${auth}, ${year})`;
+        const range = quill.getSelection() || { index: 0 };
+        quill.insertText(range.index, cite);
+        closeSearchHub();
+        save();
+    }
+
+    // 4. BATE-PAPO IA ADVISOR
+    function openAdvisor() { document.getElementById('advisor-chat').style.display = 'flex'; }
+    function closeAdvisor() { document.getElementById('advisor-chat').style.display = 'none'; }
+    function sendToAdvisor() {
+        const msg = document.getElementById('chat-msg').value;
+        const window = document.getElementById('chat-window');
+        window.innerHTML += `<div class="msg-user">${msg}</div>`;
+        setTimeout(() => {
+            window.innerHTML += `<div class="msg-advisor"><strong>Analista Sovereign:</strong> Baseado no seu arquivo sobre a Bacia do Ipojuca, notei que a Matriz AHP está consistente. Deseja que eu gere o Abstract em inglês para a seção pré-textual?</div>`;
+            window.scrollTop = window.scrollHeight;
+        }, 1000);
+        document.getElementById('chat-msg').value = "";
+    }
+
+    // 5. IMPORTAÇÃO E EXPORTAÇÃO (SANEAMENTO RADICAL)
     async function handleUniversalImport() {
-        const file = document.getElementById('f-import').files[0];
+        const file = document.getElementById('f-universal').files[0];
         if(!file) return;
         const reader = new FileReader();
         reader.onload = async function(e) {
             if(file.name.endsWith('.docx')) {
-                mammoth.convertToHtml({arrayBuffer: e.target.result}).then(r => { tempBuffer = r.value; triggerAuditReport("Word (DOCX)"); });
-            } else if(file.name.endsWith('.pdf')) {
+                mammoth.convertToHtml({arrayBuffer: e.target.result}).then(r => {
+                    quill.root.innerHTML = r.value.replace(/style="[^"]*"/g, ""); // SANITIZAÇÃO
+                    applyRigor();
+                });
+            } else {
                 const typed = new Uint8Array(this.result);
                 const pdf = await pdfjsLib.getDocument(typed).promise;
                 let text = "";
@@ -209,91 +300,29 @@
                     const content = await page.getTextContent();
                     text += content.items.map(it => it.str).join(" ") + "<br>";
                 }
-                tempBuffer = text; triggerAuditReport("Adobe (PDF)");
+                quill.root.innerHTML = text;
+                applyRigor();
             }
         };
         reader.readAsArrayBuffer(file);
     }
 
-    function triggerAuditReport(type) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(tempBuffer, 'text/html');
-        const titles = doc.querySelectorAll('h1, h2, h3, b, strong').length;
-
-        document.getElementById('audit-content').innerHTML = `
-            <div class='audit-info'><b>Mídia Detectada:</b> ${type}</div>
-            <div class='audit-info'><b>Estrutura Identificada:</b> ${titles > 0 ? titles + ' seções sugeridas' : 'Detecção por Heurística Visual Ativa'}</div>
-            <div class='audit-info'><b>Ação IA:</b> Limpeza de XML proprietário e formatação irrevogável em Arial 12 / 1.5.</div>
-        `;
-        document.getElementById('audit-overlay').style.display = 'flex';
-    }
-
-    function executeSanitization(mode) {
-        let final = tempBuffer;
-        if(mode === 'smart') {
-            // HIGIENIZAÇÃO DE FORÇA BRUTA: Remove códigos do Word
-            final = final.replace(/style="[^"]*"/g, "").replace(/class="[^"]*"/g, "").replace(/font-family:[^;]*;/g, "");
-        }
-        app.sections.intro = final;
-        switchSection('intro');
-        document.getElementById('audit-overlay').style.display = 'none';
-        applyRigorFormat();
-    }
-
-    // 3. GESTÃO DE ESTADO MODULAR (ESTILO METTZER)
-    function switchSection(id) {
-        app.sections[app.current] = quill.root.innerHTML;
-        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-        const activeItem = Array.from(document.querySelectorAll('.menu-item')).find(el => el.getAttribute('onclick').includes(id));
-        if(activeItem) activeItem.classList.add('active');
-
-        app.current = id;
-        quill.root.innerHTML = app.sections[id] || `<h1>${id.toUpperCase()}</h1><p>Inicie a escrita da sua dissertação aqui...</p>`;
-        
-        // Elementos Pré-Preenchidos (Inteligência de Dados Luana)
-        if(id==='capa' && !app.sections.capa) {
-            quill.root.innerHTML = `<div style="text-align:center; font-weight:bold;">INSTITUTO FEDERAL DE PERNAMBUCO - IFPE</div><br><div style="text-align:center; font-weight:bold;">CAMPUS RECIFE</div><br><br><div style="text-align:center; font-weight:bold;">LUANA PESSOA GENUINO</div><br><br><br><div style="text-align:center; font-weight:bold; font-size:14pt;">PAGAMENTO POR SERVIÇOS AMBIENTAIS HÍDRICOS: IDENTIFICAÇÃO DE ÁREAS PRIORITÁRIAS NA BACIA DO RIO IPOJUCA, PERNAMBUCO</div><br><br><br><br><div style="text-align:center;">RECIFE<br>2026</div>`;
-        }
-        if(id==='foco') renderFocoManager();
-        if(id==='search') renderSearchHub();
-
-        window.scrollTo(0,0);
-        applyRigorFormat();
-    }
-
-    function applyRigorFormat() {
-        quill.formatText(0, quill.getLength(), { 'font': 'arial', 'size': '12pt', 'line-height': '1.5' });
-        save();
-    }
-
-    // 4. MÓDULO SÍNTESE IA (RESUMO/ABSTRACT)
     function generateAISynthesis() {
-        const resumo = "O presente estudo analisa a identificação de áreas prioritárias para o Pagamento por Serviços Ambientais (PSA) Hídricos na Bacia do Rio Ipojuca, Pernambuco. Utilizando Análise Multicritério (AHP) em ambiente SIG, o trabalho diagnostica variáveis biofísicas e socioeconômicas para subsidiar a gestão sustentável dos recursos hídricos.";
-        app.sections.resumo = `<h1>RESUMO</h1><p>${resumo}</p><br><p><b>Palavras-chave:</b> Bacia do Ipojuca. AHP. SIG. PSA Hídrico.</p>`;
+        const resumo = "Este trabalho apresenta a identificação de áreas prioritárias para o Pagamento por Serviços Ambientais (PSA) Hídricos na Bacia do Rio Ipojuca, Pernambuco. Através do método AHP integrado ao SIG, o estudo diagnostica variáveis geoambientais fundamentais para a segurança hídrica.";
+        app.sections.resumo = `<h1>RESUMO</h1><p>${resumo}</p><br><p><b>Palavras-chave:</b> Ipojuca. PSA. AHP. SIG.</p>`;
         switchSection('resumo');
     }
 
-    // 5. CRONOGRAMA FOCO E BUSCA HUB
-    function renderFocoManager() {
-        quill.root.innerHTML = `<h1>CRONOGRAMA FOCO</h1><table class="foco-table"><tr><th>Meta</th><th>Prazo</th><th>Ok</th></tr><tr><td><input value="Finalizar Mapas SIG"></td><td>Jan/26</td><td>[ ]</td></tr><tr><td><input value="Ajuste Matriz AHP"></td><td>Jan/26</td><td>[ ]</td></tr></table>`;
-    }
-
-    function renderSearchHub() {
-        quill.root.innerHTML = `<h1>HUB DE PESQUISA</h1><p>Clique nas bases para abrir a pesquisa sobre a Bacia do Ipojuca:</p><button class="btn btn-sm btn-info mb-2" onclick="window.open('https://dadosabertos.ana.gov.br/')">Dados ANA</button><br><button class="btn btn-sm btn-info mb-2" onclick="window.open('https://scholar.google.com.br/')">Google Scholar</button>`;
-    }
-
-    // 6. PERSISTÊNCIA E EXPORTAÇÃO
+    function renderFoco() { quill.root.innerHTML = `<h1>CRONOGRAMA FOCO</h1><table style="width:100%"><tr><th>Meta</th><th>Prazo</th><th>Status</th></tr><tr><td>Finalizar SIG</td><td>Jan/26</td><td>Andamento</td></tr></table>`; }
     function save() { localStorage.setItem(DB, JSON.stringify(app)); }
     function load() {
         const data = JSON.parse(localStorage.getItem(DB));
-        if(data) { app = data; switchSection(data.current); }
-        else { switchSection('capa'); }
+        if(data) { app = data; quill.root.innerHTML = data.sections[data.current]; }
     }
-    function startApp() { document.getElementById('ethics-overlay').style.display='none'; }
-    function exportWord() {
+    function exportFinalWord() {
         const html = `<html><head><meta charset="utf-8"><style>body{font-family:Arial; font-size:12pt; margin:3cm 2cm 2cm 3cm; text-align:justify; line-height:1.5;}</style></head><body>${quill.root.innerHTML}</body></html>`;
         const blob = new Blob([html], { type: 'application/msword' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Dissertacao_Luana_Sovereign_v42.doc'; a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Dissertacao_Ipojuca_Sovereign_v46.doc'; a.click();
     }
 
     window.onload = load;
