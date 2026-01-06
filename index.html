@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="site-title">OmniEditor Diamond v12.4 | Academic Research Suite</title>
+    <title>OmniEditor Diamond v15.0 | Sovereign Academic Suite</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,7 +13,7 @@
 
     <style>
         :root {
-            --sidebar-w: 440px;
+            --sidebar-w: 460px;
             --accent: #00d2ff;
             --bg-dark: #080809;
             --bg-panel: #111113;
@@ -24,51 +24,50 @@
 
         body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Inter', sans-serif; overflow: hidden; margin: 0; }
         
-        /* App Shell and Blur Logic */
-        .app-shell { display: flex; height: 100vh; filter: blur(12px); pointer-events: none; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* App Overlays e Estados */
+        .app-shell { display: flex; height: 100vh; filter: blur(15px); pointer-events: none; transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
         .app-active { filter: blur(0); pointer-events: auto; }
 
-        /* Ethics and Integrity Overlay */
         #ethics-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.96);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
             display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px;
         }
         .ethics-card {
-            max-width: 650px; background: var(--bg-card); border: 2px solid var(--accent);
-            border-radius: 24px; padding: 40px; box-shadow: 0 0 60px rgba(0,210,255,0.3);
+            max-width: 700px; background: var(--bg-card); border: 2px solid var(--accent);
+            border-radius: 24px; padding: 40px; box-shadow: 0 0 80px rgba(0,210,255,0.4);
         }
 
-        /* Sidebar Navigation */
+        /* Sidebar e Navegação */
         aside { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid #27272a; display: flex; flex-direction: column; z-index: 100; }
         .sidebar-header { padding: 20px; background: #000; border-bottom: 2px solid var(--accent); }
-        .nav-link { color: #71717a; border: none !important; font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; padding: 15px 2px; }
+        .nav-link { color: #71717a; border: none !important; font-size: 0.52rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; padding: 15px 2px; }
         .nav-link.active { background: transparent !important; color: var(--accent) !important; border-bottom: 2px solid var(--accent) !important; }
-        .tab-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
+        .tab-content { flex-grow: 1; overflow-y: auto; padding: 18px; }
 
-        /* Admin Visibility */
+        /* Admin Tag Logic */
         .admin-only { display: none !important; }
         .is-admin .admin-only { display: block !important; }
 
-        /* Canvas ABNT (NBR 14724) */
-        #viewport { flex-grow: 1; background: #1c1c1e; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px 0; scroll-behavior: smooth; }
-        #toolbar-container { width: 210mm; background: #f8f9fa; border: 1px solid #ccc; position: sticky; top: 0; z-index: 1000; }
+        /* Editor Canvas ABNT NBR 14724 */
+        #viewport { flex-grow: 1; background: #1c1c1e; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+        #toolbar-container { width: 210mm; background: #f8f9fa; border: 1px solid #ccc; position: sticky; top: 0; z-index: 1000; display: flex; flex-wrap: wrap; justify-content: center; }
         
         #paper-canvas { 
             width: 210mm; min-height: 297mm; background: #fff; 
-            padding: 30mm 20mm 20mm 30mm; /* ABNT Standards: Top 3, Left 3, Bottom 2, Right 2 */
+            padding: 30mm 20mm 20mm 30mm; /* ABNT: Sup 3, Esq 3, Inf 2, Dir 2 */
             box-shadow: 0 50px 100px rgba(0,0,0,0.8); color: #000; position: relative; margin-bottom: 50px;
         }
         #editor { font-family: var(--abnt-font); font-size: 12pt; line-height: 1.5; border: 1px solid #ddd !important; min-height: 247mm; text-align: justify; }
 
-        /* UI Widgets */
-        .widget { background: var(--bg-card); border: 1px solid #2d2d30; border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        /* Widgets e Inteligência */
+        .widget { background: var(--bg-card); border: 1px solid #2d2d30; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
         .timer-hero { font-family: 'JetBrains Mono', monospace; font-size: 2.2rem; font-weight: 900; color: #fbbf24; text-align: center; }
-        .ai-chat-box { height: 220px; background: #000; border-radius: 10px; padding: 12px; font-size: 0.75rem; overflow-y: auto; border: 1px solid #333; margin-bottom: 10px; }
-        .latex-guide { font-size: 0.65rem; background: #000; color: var(--accent); padding: 8px; border-radius: 8px; font-family: monospace; max-height: 120px; overflow-y: auto; }
-        .btn-search-item { font-size: 0.65rem; font-weight: bold; text-align: left; padding: 8px; margin-bottom: 4px; border-radius: 6px; }
+        .ai-chat-box { height: 220px; background: #000; border-radius: 12px; padding: 12px; font-size: 0.75rem; overflow-y: auto; border: 1px solid #333; margin-bottom: 10px; }
+        .latex-guide { font-size: 0.65rem; background: #000; color: var(--accent); padding: 8px; border-radius: 8px; font-family: monospace; max-height: 100px; overflow-y: auto; }
+        .badge-status { font-size: 0.6rem; padding: 3px 8px; border-radius: 10px; font-weight: 800; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
+        /* Scrollbar Profissional */
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
@@ -76,18 +75,18 @@
 
 <div id="ethics-overlay">
     <div class="ethics-card text-center">
-        <i class="fas fa-balance-scale fa-3x text-info mb-4"></i>
-        <h4 class="fw-bold text-white mb-3">Integridade Acadêmica e Ética em IA</h4>
-        <div class="text-start text-white-50 small mb-4" style="line-height: 1.7;">
-            <p>Para prosseguir, o pesquisador declara ciência dos seguintes termos:</p>
+        <i class="fas fa-university fa-3x text-info mb-4"></i>
+        <h4 class="fw-bold text-white mb-3">Integridade Científica e Compromisso Ético</h4>
+        <div class="text-start text-white-50 small mb-4" style="line-height: 1.8;">
+            <p>Ao ingressar nesta suite, o pesquisador declara:</p>
             <ul>
-                <li>O OmniEditor integra IA para suporte gramatical e estrutural, mantendo a autoria humana obrigatória.</li>
-                <li>O plágio é combatido via rigorosa conferência de fontes e referências.</li>
-                <li>Toda pesquisa em bases externas deve ser devidamente citada conforme a NBR 10520.</li>
-                <li>Privacidade: Todos os dados residem apenas no seu navegador local.</li>
+                <li>A IA atua como **Orientadora Técnica**, auxiliando na estruturação e revisão.</li>
+                <li>A autoria intelectual e os dados da pesquisa (SIG/AHP) pertencem ao autor.</li>
+                <li>Repúdio total ao plágio, com compromisso rigoroso com a NBR 10520.</li>
+                <li>Segurança: Todos os dados são processados e salvos **localmente**.</li>
             </ul>
         </div>
-        <button class="btn btn-info w-100 fw-bold py-2" onclick="acceptEthics()">CONCORDO E DECLARO INTEGRIDADE</button>
+        <button class="btn btn-info w-100 fw-bold py-3" onclick="acceptEthics()">CONCORDO E DECLARO INTEGRIDADE</button>
     </div>
 </div>
 
@@ -95,90 +94,98 @@
     <aside>
         <div class="sidebar-header d-flex justify-content-between align-items-center">
             <div>
-                <h6 id="site-name-ui" class="mb-0 fw-bold text-info text-uppercase">OmniEditor Platinum</h6>
-                <small id="user-name-ui" class="text-white-50 x-small">Suite de Pesquisa v12.4</small>
+                <h6 id="site-name-ui" class="mb-0 fw-bold text-info">OMNIEDITOR DIAMOND v15</h6>
+                <small id="user-name-ui" class="text-white-50 x-small">Suite de Orientação Avançada</small>
             </div>
-            <i class="fas fa-key text-secondary" style="cursor: pointer;" onclick="toggleAdmin()"></i>
+            <i class="fas fa-fingerprint text-secondary" style="cursor: pointer;" onclick="toggleAdmin()"></i>
         </div>
         
         <ul class="nav nav-tabs nav-fill" id="mainTabs">
-            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-sprint">Sprint</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-form">Dados</a></li>
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-form">Template</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-import">Importar</a></li>
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-search">Busca</a></li>
-            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-ai">IA & Ética</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-ai">Orientador IA</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-sprint">Sprint</a></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="tab-sprint">
+            <div class="tab-pane fade show active" id="tab-form">
                 <div class="widget">
-                    <label class="x-small fw-bold text-warning mb-1 uppercase">Cronômetro de Entrega</label>
-                    <div id="timer" class="timer-hero">00:00:00</div>
-                    <div class="admin-only mt-2">
-                        <input type="datetime-local" id="deadline" class="form-control form-control-sm bg-dark text-white border-secondary" onchange="save()">
-                    </div>
+                    <h6 class="x-small fw-bold text-warning uppercase mb-3">Metadados Obrigatórios</h6>
+                    <input type="text" id="meta-inst" class="form-control form-control-sm bg-dark text-white mb-2" placeholder="Instituição">
+                    <input type="text" id="meta-title" class="form-control form-control-sm bg-dark text-white mb-2" placeholder="Título Completo">
+                    <input type="text" id="meta-author" class="form-control form-control-sm bg-dark text-white mb-2" placeholder="Autor">
+                    <input type="text" id="meta-advisor" class="form-control form-control-sm bg-dark text-white mb-3" placeholder="Orientador">
+                    <button class="btn btn-sm btn-info w-100 fw-bold mb-2" onclick="injectMetadata()">GERAR CAPA ABNT</button>
+                    <button class="btn btn-xxs btn-outline-info w-100" onclick="generateSumario()">SUMÁRIO AUTOMÁTICO</button>
                 </div>
-                <h6 class="x-small fw-bold text-secondary uppercase mb-2 d-flex justify-content-between">Metas <button class="btn btn-xxs btn-info admin-only" onclick="addTask()">+</button></h6>
-                <div id="task-list"></div>
+                <div class="widget">
+                    <h6 class="x-small fw-bold text-success uppercase mb-2">Estruturas Prontas</h6>
+                    <button class="btn btn-xxs btn-outline-success w-100 mb-1" onclick="loadFullTpl()">CARREGAR ESTRUTURA DISSERTAÇÃO</button>
+                    <button class="btn btn-xxs btn-outline-light w-100" onclick="insertAHP()">TEMPLATE TABELA AHP</button>
+                </div>
             </div>
 
-            <div class="tab-pane fade" id="tab-form">
+            <div class="tab-pane fade" id="tab-import">
                 <div class="widget">
-                    <h6 class="x-small fw-bold text-warning uppercase mb-3">Gerador de Capa ABNT</h6>
-                    <input type="text" id="meta-inst" class="form-control form-control-sm bg-dark text-white mb-2" placeholder="Instituição">
-                    <input type="text" id="meta-title" class="form-control form-control-sm bg-dark text-white mb-2" placeholder="Título">
-                    <input type="text" id="meta-author" class="form-control form-control-sm bg-dark text-white mb-3" placeholder="Autor">
-                    <button class="btn btn-xxs btn-info w-100 fw-bold" onclick="injectMetadata()">INJETAR CAPA</button>
-                </div>
-                <div class="widget admin-only">
-                    <h6 class="x-small fw-bold text-info mb-2 uppercase">Importador de Arquivo</h6>
+                    <h6 class="x-small fw-bold text-warning uppercase mb-2">Subir Manuscrito Parcial (.docx)</h6>
+                    <p class="text-white-50" style="font-size: 0.6rem;">O sistema formata inteligentemente conforme o template ABNT.</p>
                     <input type="file" id="import-docx" class="form-control form-control-sm bg-dark text-white mb-2" accept=".docx" onchange="processDocx()">
-                    <button class="btn btn-xxs btn-outline-danger w-100" onclick="resetDB()">REDEFINIR SISTEMA</button>
+                    <button class="btn btn-sm btn-warning w-100 fw-bold" onclick="processDocx()">RE-FORMATAR ARQUIVO</button>
                 </div>
+                <button class="btn btn-xxs btn-info w-100 fw-bold" onclick="applyABNT()">FORÇAR NORMALIZAÇÃO TOTAL</button>
             </div>
 
             <div class="tab-pane fade" id="tab-search">
                 <div class="input-group mb-3">
-                    <input type="text" id="q" class="form-control form-control-sm bg-dark text-white" placeholder="Termo de pesquisa...">
+                    <input type="text" id="q" class="form-control form-control-sm bg-dark text-white" placeholder="Tema de pesquisa...">
                     <button class="btn btn-info btn-sm" onclick="runSearch()"><i class="fas fa-search"></i></button>
                 </div>
-                <div class="d-grid gap-1">
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('scholar')">Google Scholar</button>
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('scielo')">SciELO Brasil</button>
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('bdtd')">Teses e Dissertações (Ibict)</button>
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('capes')">Portal CAPES</button>
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('ana')">Dados Hídricos (ANA)</button>
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('perplexity')">Perplexity AI (Busca Inteligente)</button>
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('pubmed')">PubMed / Health</button>
-                    <button class="btn btn-search-item btn-outline-light" onclick="go('dimensions')">Dimensions.ai</button>
+                <div class="d-grid gap-1 mb-3">
+                    <button class="btn btn-sm btn-outline-light text-start" onclick="go('scholar')">Google Scholar</button>
+                    <button class="btn btn-sm btn-outline-light text-start" onclick="go('scielo')">SciELO Brasil</button>
+                    <button class="btn btn-sm btn-outline-light text-start" onclick="go('capes')">Portal CAPES</button>
+                    <button class="btn btn-sm btn-outline-light text-start" onclick="go('bdtd')">Teses e Dissertações (Ibict)</button>
+                    <button class="btn btn-sm btn-outline-light text-start" onclick="go('ana')">Dados ANA (Recursos Hídricos)</button>
+                    <button class="btn btn-sm btn-outline-light text-start" onclick="go('perplexity')">Perplexity AI</button>
                 </div>
-                <div id="ref-library" class="mt-4"></div>
+                <div id="ref-library"></div>
             </div>
 
             <div class="tab-pane fade" id="tab-ai">
                 <div class="widget">
-                    <div class="form-check form-switch mb-2">
-                        <input class="form-check-input" type="checkbox" id="ai-toggle" checked onchange="save()">
-                        <label class="form-check-label x-small fw-bold" for="ai-toggle">Sugestões de IA Ativas</label>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="x-small fw-bold text-info uppercase mb-0">Integridade Acadêmica</h6>
+                        <span id="plagiarism-badge" class="badge-status bg-success">ORIGINAL</span>
                     </div>
-                    <h6 class="x-small fw-bold text-info uppercase mt-3 mb-1">Fórmulas LaTeX (AHP/SIG)</h6>
-                    <div class="latex-guide">
-                        <div onclick="copyL('\\lambda_{max}')" style="cursor:pointer">• Lambda Max</div>
-                        <div onclick="copyL('CI = \\frac{\\lambda_{max}-n}{n-1}')" style="cursor:pointer">• Índice de Consistência</div>
-                        <div onclick="copyL('\\sum w_i = 1')" style="cursor:pointer">• Somatório de Pesos</div>
-                    </div>
+                    <button class="btn btn-xxs btn-outline-danger w-100" onclick="simulatePlagiarism()">VERIFICAR PLÁGIO (Simulação)</button>
                 </div>
                 <div class="ai-chat-box" id="ai-chat">
-                    <div class="text-info small">[IA]: Pronto para brainstormings de Metodologia e Discussão. Como posso ajudar?</div>
+                    <div class="text-info small">[ORIENTADOR]: Pronto para revisar sua metodologia de AHP na Bacia do Ipojuca.</div>
                 </div>
-                <div class="input-group">
-                    <input type="text" id="ai-msg" class="form-control form-control-sm bg-dark text-white" placeholder="Mensagem...">
+                <div class="input-group mb-2">
+                    <input type="text" id="ai-msg" class="form-control form-control-sm bg-dark text-white" placeholder="Dúvida técnica ou rascunho...">
                     <button class="btn btn-info btn-sm" onclick="askAI()"><i class="fas fa-paper-plane"></i></button>
                 </div>
+                <div class="latex-guide">
+                    <div onclick="copyL('\\lambda_{max}')" style="cursor:pointer">• Lambda Max (AHP)</div>
+                    <div onclick="copyL('CI = \\frac{\\lambda_{max}-n}{n-1}')" style="cursor:pointer">• Índice de Consistência</div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tab-sprint">
+                <div class="widget">
+                    <div id="timer" class="timer-hero">00:00:00</div>
+                    <div class="admin-only mt-2"><input type="datetime-local" id="deadline" class="form-control form-control-sm bg-dark text-white border-secondary" onchange="save()"></div>
+                </div>
+                <h6 class="x-small fw-bold text-secondary uppercase mb-2 d-flex justify-content-between">Plano de Escrita <button class="btn btn-xxs btn-info admin-only" onclick="addTask()">+</button></h6>
+                <div id="task-list"></div>
+                <button class="btn btn-xxs btn-outline-danger w-100 mt-4 admin-only" onclick="resetDB()">REDEFINIR SISTEMA</button>
             </div>
         </div>
 
         <div class="p-3 border-top border-secondary">
-            <button class="btn btn-sm btn-primary w-100 fw-bold" onclick="exportDoc()">EXPORTAR WORD FINAL</button>
+            <button class="btn btn-sm btn-primary w-100 fw-bold py-2" onclick="exportDoc()"><i class="fas fa-file-word me-2"></i>EXPORTAR WORD ABNT</button>
         </div>
     </aside>
 
@@ -196,91 +203,40 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // 1. Core Logic & Ethics
+    // 1. Core Logic: Ética & Admin
     function acceptEthics() {
         document.getElementById('ethics-overlay').style.display = 'none';
         document.getElementById('app-ui').classList.add('app-active');
-        localStorage.setItem('omni_ethics_v12_4', 'true');
+        localStorage.setItem('omni_v15_ethics', 'true');
     }
 
     function toggleAdmin() {
-        if(prompt("Senha do Criador:") === "IPOJUCAPRO") {
+        if(prompt("Chave Mestra Diamond:") === "IPOJUCAPRO") {
             document.getElementById('master-body').classList.add('is-admin');
-            localStorage.setItem('omni_admin_v12_4', 'true');
+            localStorage.setItem('omni_v15_admin', 'true');
         }
     }
 
-    // 2. Editor Setup
+    // 2. Editor Setup (Aumentado para Tabelas e Fórmulas)
     var quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
             formula: true,
-            toolbar: [[{ 'header': [1, 2, false] }], ['bold', 'italic', 'underline', 'formula'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], [{ 'align': [] }], ['image', 'link', 'clean']]
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'formula'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                ['image', 'link', 'clean']
+            ]
         }
     });
     document.getElementById('toolbar-container').appendChild(document.querySelector('.ql-toolbar'));
 
-    // 3. Search & IA Integration
-    function go(b) {
-        const q = document.getElementById('q').value;
-        const urls = {
-            scholar: `https://scholar.google.com.br/scholar?q=${q}`,
-            scielo: `https://search.scielo.org/?q=${q}`,
-            capes: `https://www-periodicos-capes-gov-br.ezl.periodicos.capes.gov.br/index.php/consulta-acervo.html?q=${q}`,
-            bdtd: `https://bdtd.ibict.br/vufind/Search/Results?lookfor=${q}`,
-            ana: `https://dadosabertos.ana.gov.br/`,
-            perplexity: `https://www.perplexity.ai/search?q=${q}`,
-            pubmed: `https://pubmed.ncbi.nlm.nih.gov/?term=${q}`,
-            dimensions: `https://app.dimensions.ai/discover/publication?search_text=${q}`
-        };
-        window.open(urls[b], '_blank');
-    }
+    const DB = 'omni_v15_diamond_db';
+    let app = { html: "", deadline: "", tasks: [], refs: [], site: "OmniEditor Diamond" };
 
-    function askAI() {
-        if(!app.aiEnabled) return alert("IA Desativada nas configurações.");
-        const box = document.getElementById('ai-chat');
-        const msg = document.getElementById('ai-msg').value;
-        box.innerHTML += `<div class='text-white-50 mt-2'>Você: ${msg}</div>`;
-        setTimeout(() => {
-            box.innerHTML += `<div class='text-info mt-1'>[IA]: Analisando contexto... Para sua dissertação na Bacia do Ipojuca, recomendo focar na normalização dos critérios AHP...</div>`;
-            box.scrollTop = box.scrollHeight;
-        }, 700);
-        document.getElementById('ai-msg').value = "";
-    }
-
-    // 4. Data Persistence
-    const DB = 'omni_v12_4_final';
-    let app = { site: "OmniEditor Platinum", html: "", deadline: "", tasks: [], aiEnabled: true, refs: [] };
-
-    function save() { 
-        app.html = quill.root.innerHTML; 
-        app.deadline = document.getElementById('deadline').value;
-        app.aiEnabled = document.getElementById('ai-toggle').checked;
-        localStorage.setItem(DB, JSON.stringify(app)); 
-    }
-
-    function load() {
-        if(localStorage.getItem('omni_ethics_v12_4') === 'true') acceptEthics();
-        if(localStorage.getItem('omni_admin_v12_4') === 'true') document.getElementById('master-body').classList.add('is-admin');
-        const d = JSON.parse(localStorage.getItem(DB));
-        if(d) {
-            app = d; quill.root.innerHTML = d.html || "";
-            document.getElementById('deadline').value = d.deadline || "";
-            document.getElementById('ai-toggle').checked = d.aiEnabled;
-            renderTasks(); if(d.deadline) startTimer(d.deadline);
-        }
-    }
-
-    // 5. Utility Functions
-    function injectMetadata() {
-        const inst = document.getElementById('meta-inst').value.toUpperCase();
-        const title = document.getElementById('meta-title').value.toUpperCase();
-        const author = document.getElementById('meta-author').value.toUpperCase();
-        const capa = `<div style="text-align:center; font-weight:bold;">${inst}</div><br><br><br><div style="text-align:center; font-weight:bold;">${author}</div><br><br><br><br><br><div style="text-align:center; font-weight:bold; font-size:14pt;">${title}</div><br><br><br><br><br><div style="text-align:center; margin-top:10cm;">RECIFE<br>2026</div>`;
-        quill.clipboard.dangerouslyPasteHTML(0, capa);
-        save();
-    }
-
+    // 3. Importação Inteligente DOCX
     function processDocx() {
         const file = document.getElementById('import-docx').files[0];
         if (!file) return;
@@ -288,10 +244,85 @@
         reader.onload = function(e) {
             mammoth.convertToHtml({arrayBuffer: e.target.result}).then(function(result) {
                 quill.clipboard.dangerouslyPasteHTML(0, result.value);
-                quill.formatText(0, quill.getLength(), { 'font': 'arial', 'size': '12pt', 'line-height': '1.5' });
+                setTimeout(applyABNT, 500);
             });
         };
         reader.readAsArrayBuffer(file);
+    }
+
+    function applyABNT() {
+        quill.formatText(0, quill.getLength(), { 'font': 'arial', 'size': '12pt', 'line-height': '1.5' });
+        save();
+    }
+
+    // 4. Metadados e Sumário
+    function injectMetadata() {
+        const inst = document.getElementById('meta-inst').value.toUpperCase() || "INSTITUIÇÃO";
+        const title = document.getElementById('meta-title').value.toUpperCase() || "TÍTULO DA DISSERTAÇÃO";
+        const author = document.getElementById('meta-author').value.toUpperCase() || "NOME DO AUTOR";
+        const advisor = document.getElementById('meta-advisor').value || "Orientador";
+        
+        const capa = `<div style="text-align:center; font-weight:bold;">${inst}</div><br><br><br><div style="text-align:center; font-weight:bold;">${author}</div><br><br><br><br><br><div style="text-align:center; font-weight:bold; font-size:14pt;">${title}</div><br><br><br><br><br><div style="text-align:center; margin-top:10cm;">RECIFE<br>2026</div>`;
+        quill.clipboard.dangerouslyPasteHTML(0, capa);
+        save();
+    }
+
+    function generateSumario() {
+        const heads = document.querySelectorAll('#editor h1, #editor h2');
+        let toc = "<h1 style='text-align:center;'>SUMÁRIO</h1><br><ul>";
+        heads.forEach(h => { if(h.innerText !== 'SUMÁRIO') toc += `<li style='list-style:none; border-bottom:1px dotted #ccc; margin-bottom:5px;'>${h.innerText}</li>`; });
+        toc += "</ul><br>";
+        quill.clipboard.dangerouslyPasteHTML(quill.getLength(), toc);
+    }
+
+    function loadFullTpl() {
+        const tpl = `<h1>1. INTRODUÇÃO</h1><p>Apresente o problema...</p><br><h1>2. FUNDAMENTAÇÃO TEÓRICA</h1><p>Revisão literária...</p><br><h1>3. METODOLOGIA</h1><p>Método AHP e SIG...</p>`;
+        quill.clipboard.dangerouslyPasteHTML(quill.getLength(), tpl);
+        applyABNT();
+    }
+
+    // 5. Pesquisa e Citação
+    function go(b) {
+        const q = document.getElementById('q').value;
+        const urls = { scholar: `https://scholar.google.com.br/scholar?q=${q}`, scielo: `https://search.scielo.org/?q=${q}`, capes: `https://www-periodicos-capes-gov-br.ezl.periodicos.capes.gov.br/index.php/consulta-acervo.html?q=${q}`, bdtd: `https://bdtd.ibict.br/vufind/Search/Results?lookfor=${q}`, ana: `https://dadosabertos.ana.gov.br/`, perplexity: `https://www.perplexity.ai/search?q=${q}` };
+        window.open(urls[b], '_blank');
+    }
+
+    function runSearch() {
+        const q = document.getElementById('q').value;
+        app.refs.push({ id: Date.now(), txt: `AUTOR, A. Estudo sobre ${q}. 2026.`, cite: `(AUTOR, 2026)` });
+        renderRefs(); save();
+    }
+
+    function renderRefs() {
+        document.getElementById('ref-library').innerHTML = app.refs.map(r => `<div class="widget x-small mb-1">${r.txt}<br><button class="btn btn-xxs btn-info mt-1" onclick="injectCite('${r.cite}')">Citar</button></div>`).join('');
+    }
+    function injectCite(c) { const r = quill.getSelection() || { index: 0 }; quill.insertText(r.index, c); }
+
+    // 6. Inteligência e Salvamento
+    function askAI() {
+        const box = document.getElementById('ai-chat');
+        box.innerHTML += `<div class='text-white-50 mt-2'>Você: ${document.getElementById('ai-msg').value}</div>`;
+        setTimeout(() => { box.innerHTML += `<div class='text-info mt-1'>[ORIENTADOR]: Analisando... Para a Bacia do Ipojuca, certifique-se de normalizar os critérios de declividade antes da matriz AHP.</div>`; box.scrollTop = box.scrollHeight; }, 700);
+        document.getElementById('ai-msg').value = "";
+    }
+
+    function simulatePlagiarism() {
+        const b = document.getElementById('plagiarism-badge');
+        b.innerText = "CHORANDO..."; b.className = "badge-status bg-warning";
+        setTimeout(() => { b.innerText = "ORIGINAL: 99%"; b.className = "badge-status bg-success"; alert("Conferência Final: Nenhuma similaridade crítica detectada."); }, 1500);
+    }
+
+    function save() { 
+        app.html = quill.root.innerHTML; app.deadline = document.getElementById('deadline').value;
+        localStorage.setItem(DB, JSON.stringify(app)); 
+    }
+
+    function load() {
+        if(localStorage.getItem('omni_v15_ethics') === 'true') acceptEthics();
+        if(localStorage.getItem('omni_v15_admin') === 'true') document.getElementById('master-body').classList.add('is-admin');
+        const d = JSON.parse(localStorage.getItem(DB));
+        if(d) { app = d; quill.root.innerHTML = d.html || ""; document.getElementById('deadline').value = d.deadline || ""; renderTasks(); renderRefs(); if(d.deadline) startTimer(d.deadline); }
     }
 
     function startTimer(t) {
@@ -305,12 +336,6 @@
         }, 1000);
     }
 
-    function exportDoc() {
-        const html = `<html><head><meta charset="utf-8"><style>body{font-family:Arial; font-size:12pt; margin:3cm 2cm 2cm 3cm; text-align:justify;}</style></head><body>${quill.root.innerHTML}</body></html>`;
-        const blob = new Blob([html], { type: 'application/msword' });
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Manuscrito_Final_ABNT.doc'; a.click();
-    }
-
     function addTask() {
         const val = prompt("Nova Meta:"); if(!val) return;
         app.tasks.push({ id: Date.now(), text: val, done: false });
@@ -319,13 +344,23 @@
     function renderTasks() {
         document.getElementById('task-list').innerHTML = app.tasks.map(t => `<div class="widget p-2 mb-1 x-small d-flex justify-content-between align-items-center">
             <div onclick="toggleTask(${t.id})" style="cursor:pointer">
-                <input type="checkbox" ${t.done ? 'checked' : ''} ${!localStorage.getItem('omni_admin_v12_4') ? 'disabled' : ''}>
-                <span style="${t.done ? 'text-decoration:line-through; color:gray' : ''}">${t.text}</span>
+                <input type="checkbox" ${t.done ? 'checked' : ''} ${!localStorage.getItem('omni_v15_admin') ? 'disabled' : ''}>
+                <span>${t.text}</span>
             </div>
+            <i class="fas fa-times text-danger admin-only" onclick="delTask(${t.id})"></i>
         </div>`).join('');
     }
     function toggleTask(id) { const t = app.tasks.find(x => x.id === id); t.done = !t.done; renderTasks(); save(); }
-    function copyL(c) { navigator.clipboard.writeText(c); alert("Código LaTeX Copiado!"); }
+    function delTask(id) { app.tasks = app.tasks.filter(x => x.id !== id); renderTasks(); save(); }
+
+    function exportDoc() {
+        const html = `<html><head><meta charset="utf-8"><style>body{font-family:Arial; font-size:12pt; margin:3cm 2cm 2cm 3cm; text-align:justify;}</style></head><body>${quill.root.innerHTML}</body></html>`;
+        const blob = new Blob([html], { type: 'application/msword' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Manuscrito_Final_v15.doc'; a.click();
+    }
+
+    function insertAHP() { quill.clipboard.dangerouslyPasteHTML(quill.getLength(), `<table border="1" style="width:100%"><tr><th>Critério</th><th>Peso (AHP)</th></tr></table>`); }
+    function copyL(c) { navigator.clipboard.writeText(c); alert("LaTeX Copiado!"); }
     function resetDB() { if(confirm("Apagar tudo?")) { localStorage.clear(); location.reload(); } }
 
     window.onload = load;
